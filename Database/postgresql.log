@@ -1,0 +1,62 @@
+2021-11-10 19:20:02.154 EST [43055] LOG:  starting PostgreSQL 14.0 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2021-11-10 19:20:02.156 EST [43055] LOG:  listening on IPv6 address "::1", port 5433
+2021-11-10 19:20:02.156 EST [43055] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2021-11-10 19:20:02.157 EST [43055] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5433"
+2021-11-10 19:20:02.163 EST [43058] LOG:  database system was shut down at 2021-11-10 19:20:02 EST
+2021-11-10 19:20:02.173 EST [43055] LOG:  database system is ready to accept connections
+2021-11-10 19:20:24.210 EST [43075] ERROR:  syntax error at or near "createdb" at character 1
+2021-11-10 19:20:24.210 EST [43075] STATEMENT:  createdb test
+	;
+2021-11-10 19:22:21.322 EST [43102] ERROR:  syntax error at or near ";" at character 19
+2021-11-10 19:22:21.322 EST [43102] STATEMENT:  CREATE TABLE users;
+2021-11-10 19:31:20.686 EST [43102] ERROR:  syntax error at or near "0" at character 21
+2021-11-10 19:31:20.686 EST [43102] STATEMENT:  INSERT INTO users (
+	0,
+	"test_user_1",
+	0
+	);
+2021-11-10 20:16:44.482 EST [43610] ERROR:  syntax error at or near "int" at character 36
+2021-11-10 20:16:44.482 EST [43610] STATEMENT:  ALTER TABLE users
+	ALTER COLUMN uid int autoincrement
+	;
+2021-11-10 20:17:35.440 EST [43610] ERROR:  syntax error at or near "intl" at character 36
+2021-11-10 20:17:35.440 EST [43610] STATEMENT:  ALTER TABLE users
+	ALTER COLUMN uid intl
+	;
+2021-11-10 20:28:09.000 EST [43737] ERROR:  relation "pg_catalog" does not exist at character 15
+2021-11-10 20:28:09.000 EST [43737] STATEMENT:  select * from pg_catalog,pg_tables;
+2021-11-10 20:28:32.389 EST [43737] ERROR:  relation "users" does not exist at character 15
+2021-11-10 20:28:32.389 EST [43737] STATEMENT:  select * from users
+	;
+2021-11-10 20:29:36.022 EST [43737] ERROR:  syntax error at or near "s" at character 38
+2021-11-10 20:29:36.022 EST [43737] STATEMENT:  CREATE TABLE users (UID int NOT NULL
+	s
+	;
+	;
+	);
+2021-11-10 20:30:06.569 EST [43737] ERROR:  syntax error at or near ")" at character 57
+2021-11-10 20:30:06.569 EST [43737] STATEMENT:  CREATE TABLE users (
+	UID int NOT NULL,
+	username varchar());
+2021-11-10 20:46:00.147 EST [43737] ERROR:  syntax error at or near "[" at character 50
+2021-11-10 20:46:00.147 EST [43737] STATEMENT:  ALTER TABLE users
+	ALTER COLUMN chats
+	SET DEFAULT [];
+2021-11-10 20:46:17.720 EST [43737] ERROR:  syntax error at or near "app" at character 19
+2021-11-10 20:46:17.720 EST [43737] STATEMENT:  ALTER TABLE users
+	app-# ALTER COLUMN chats
+	app-# SET DEFAULT ARRAY[];
+2021-11-10 20:46:43.286 EST [43737] ERROR:  cannot determine type of empty array
+2021-11-10 20:46:43.286 EST [43737] HINT:  Explicitly cast to the desired type, for example ARRAY[]::integer[].
+2021-11-10 20:46:43.286 EST [43737] STATEMENT:  ALTER TABLE users ALTER COLUMN chats SET DEFAULT ARRAY[];
+2021-11-10 20:47:37.733 EST [43737] ERROR:  syntax error at or near "INT" at character 8
+2021-11-10 20:47:37.733 EST [43737] STATEMENT:  INSERT INT users VALUES ("test_user_1");
+2021-11-10 20:47:51.040 EST [43737] ERROR:  column "test_user_1" does not exist at character 27
+2021-11-10 20:47:51.040 EST [43737] STATEMENT:  INSERT INTO users VALUES ("test_user_1");
+2021-11-10 20:48:08.707 EST [43737] ERROR:  column "test_user_1" does not exist at character 37
+2021-11-10 20:48:08.707 EST [43737] STATEMENT:  INSERT INTO users(username) VALUES ("test_user_1");
+2021-11-10 20:50:19.584 EST [43737] ERROR:  column "testuser_1" does not exist at character 37
+2021-11-10 20:50:19.584 EST [43737] STATEMENT:  INSERT INTO users(username)
+	VALUES ("testuser_1");
+2021-11-10 20:56:11.433 EST [43737] ERROR:  syntax error at or near "ARRAY" at character 42
+2021-11-10 20:56:11.433 EST [43737] STATEMENT:  ALTER TABLE users ALTER COLUMN chats SET ARRAY['testchat_1'] WHERE uid = 0;
