@@ -385,3 +385,11 @@
 2021-11-12 13:35:34.009 EST [64253] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5433"
 2021-11-12 13:35:34.021 EST [64255] LOG:  database system was shut down at 2021-11-12 13:35:07 EST
 2021-11-12 13:35:34.028 EST [64253] LOG:  database system is ready to accept connections
+2021-11-16 12:04:12.633 EST [23293] ERROR:  syntax error at or near "dt" at character 1
+2021-11-16 12:04:12.633 EST [23293] STATEMENT:  dt
+	;
+2021-11-19 11:42:51.269 EST [64253] LOG:  received fast shutdown request
+2021-11-19 11:42:51.270 EST [64253] LOG:  aborting any active transactions
+2021-11-19 11:42:51.272 EST [64253] LOG:  background worker "logical replication launcher" (PID 64261) exited with exit code 1
+2021-11-19 11:42:51.273 EST [64256] LOG:  shutting down
+2021-11-19 11:42:51.288 EST [64253] LOG:  database system is shut down
