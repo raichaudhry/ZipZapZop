@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+     width="100"
+     height="100"
+     viewBox="0 0 26.458333 26.458334"
+     version="1.1"
+     id="svg4715"
+     inkscape:version="1.1 (c4e8f9e, 2021-05-24)"
+     sodipodi:docname="chatIcon.svg"
+     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+     xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:svg="http://www.w3.org/2000/svg">
+    <sodipodi:namedview
+         id="namedview4717"
+         pagecolor="#ffffff"
+         bordercolor="#666666"
+         borderopacity="1.0"
+         inkscape:pageshadow="2"
+         inkscape:pageopacity="0.0"
+         inkscape:pagecheckerboard="0"
+         inkscape:document-units="mm"
+         showgrid="false"
+         units="px"
+         inkscape:zoom="9.21"
+         inkscape:cx="50"
+         inkscape:cy="50"
+         inkscape:window-width="1920"
+         inkscape:window-height="1147"
+         inkscape:window-x="0"
+         inkscape:window-y="25"
+         inkscape:window-maximized="0"
+         inkscape:current-layer="layer1" />
+    <defs
+         id="defs4712" />
+    <g
+         inkscape:label="Layer 1"
+         inkscape:groupmode="layer"
+         id="layer1">
+        <rect
+             style="fill:#ececec;stroke:#ececec;stroke-width:0.344386;paint-order:fill markers stroke"
+             id="rect4821"
+             width="26.113947"
+             height="26.113947"
+             x="0.17219304"
+             y="0.17219304"
+             ry="0"
+             rx="0" />
+        <ellipse
+             style="fill:#4d4d4d;stroke:#4d4d4d;stroke-width:0.791782;paint-order:fill markers stroke"
+             id="path5473"
+             cx="13.229167"
+             cy="13.229167"
+             rx="10.187443"
+             ry="10.187442" />
+        <path
+             sodipodi:type="star"
+             style="stroke:black;paint-order:fill markers stroke"
+             id="path5613"
+             inkscape:flatsided="true"
+             sodipodi:sides="3"
+             sodipodi:cx="25.624321"
+             sodipodi:cy="57.328991"
+             sodipodi:r1="28.457285"
+             sodipodi:r2="14.228642"
+             sodipodi:arg1="-0.44999658"
+             sodipodi:arg2="0.59720097"
+             inkscape:rounded="1"
+             inkscape:randomized="0.1"
+             d="M 51.334736,43.69938 C 70.307174,89.903074 75.579471,89.321002 24.758797,83.398264 -26.061876,77.475525 -23.435424,81.863689 3.7831367,42.9028 31.001698,3.9419112 32.362297,-2.504314 51.334736,43.69938 Z"
+             transform="matrix(0.2282389,-0.02599054,0.02599054,0.2282389,5.5833521,1.0273832)"
+             inkscape:transform-center-x="-0.30701119"
+             inkscape:transform-center-y="-2.3339267" />
+    </g>
+</svg>
