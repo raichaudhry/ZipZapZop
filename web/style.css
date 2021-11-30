@@ -1,6 +1,17 @@
+@import "./theme.css";
+
 #hamburger {
 	/* Hamburger image */
+	background-image: url("/assets/hamburger.svg");
 }
 #compose {
 	/* Rounded rect w/ line cutting through top right. iMessage compose */
+	background-image: url("/assets/compose.svg");
+}
+#title {
+	margin: 0;
+}
+
+main {
+	padding: 2.5em;
 }
