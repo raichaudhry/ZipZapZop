@@ -7,9 +7,11 @@ html {
 
 	--padding-default: 0.5em;
 
-	--box-shadow-smallest: 0 0.05em 0.06em 0 black;
-	--box-shadow-default: 0 0.1em 0.25em 0 black;
-	--box-shadow-largest: 0 0.25em 1em 0 black;
+	--border-radius-default: 0.75em;
+
+	--box-shadow-smallest: 0 0 0.06em 0 black;
+	--box-shadow-default: 0 0 0.25em 0 black;
+	--box-shadow-largest: 0 0 1em 0 black;
 
 	--h1-font: "Comfortaa";
 }
@@ -25,8 +27,7 @@ body {
 	margin: 0;
 }
 html {
-	height: 100%;
-	overflow: hidden;
+	overflow: scroll;
 	padding: 0;
 }
 body {

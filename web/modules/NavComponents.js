@@ -1,3 +1,3 @@
-import ButtonIcon from "../components/ButtonIcon.js";
-import TopNav from "../components/TopNav.js";
+import ButtonIcon from "../components/ButtonIcon/main.js";
+import TopNav from "../components/TopNav/main.js";
 export default { ButtonIcon, TopNav };

@@ -9,11 +9,27 @@
 	<body>
 		<top-nav>
 			<button-icon id="hamburger" onclick="alert('Clicked!')"></button-icon>
-			<h1 id="title"> <!--Chat --> </h1>
+			<h1 id="title">Name</h1>
 			<button-icon id="compose" onclick="alert('Clicked!')"></button-icon>
 		</top-nav>
-		<main id="chatlist">
+		<main id="chat-list">
 			<!-- List of <chat>s here -->
+			<chat-list-element>
+				<img src="/assets/chatIcon.svg" alt="icon" slot="icon">
+				<h1 slot="title">Title0</h1>
+			</chat-list-element>
+			<chat-list-element>
+				<img src="/assets/chatIcon.svg" alt="icon" slot="icon">
+				<h1 slot="title">Title1</h1>
+			</chat-list-element>
+			<chat-list-element>
+				<img src="/assets/chatIcon.svg" alt="icon" slot="icon">
+				<h1 slot="title">Title2</h1>
+			</chat-list-element>
+			<chat-list-element>
+				<img src="/assets/chatIcon.svg" alt="icon" slot="icon">
+				<h1 slot="title">Title3</h1>
+			</chat-list-element>
 		</main>
 		<script src="script.js" type="module"></script>
 	</body>

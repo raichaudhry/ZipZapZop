@@ -1,4 +1,7 @@
 import _NavComponents from "./modules/NavComponents.js";
-import _ChatIcon from "./components/ChatIcon.js";
-import ChatListElement from "./components/ChatListElement.js";
-document.getElementById("chatlist").appendChild(new ChatListElement("Test", "chatIcon.svg"));
+import ChatListElement from "./components/ChatListElement/main.js";
+
+const chatList = document.getElementById("chat-list");
+
+let testElem = new ChatListElement("Eloquent JavaScript", "https://eloquentjavascript.net/favicon.ico");
+chatList.appendChild(testElem);

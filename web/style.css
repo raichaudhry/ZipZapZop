@@ -2,16 +2,24 @@
 
 #hamburger {
 	/* Hamburger image */
-	background-image: url("/assets/hamburger.svg");
+	--bg-image: url("/assets/hamburger.svg");
 }
 #compose {
-	/* Rounded rect w/ line cutting through top right. iMessage compose */
-	background-image: url("/assets/compose.svg");
+	/* Rounded rect w/ line cutting through top right. Standard compose button. */
+	--bg-image: url("/assets/compose.svg");
 }
 #title {
 	margin: 0;
 }
 
-main {
-	padding: 2.5em;
+#chat-list {
+	padding: var(--padding-default);
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: stretch;
+	align-content: flex-start;
+	gap: var(--padding-default);
+}
+#chat-list > * {
+	flex-grow: 1;
 }
