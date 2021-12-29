@@ -1,0 +1,25 @@
+@import "./theme.css";
+
+#hamburger {
+	/* Hamburger image */
+	--bg-image: url("/assets/hamburger.svg");
+}
+#compose {
+	/* Rounded rect w/ line cutting through top right. Standard compose button. */
+	--bg-image: url("/assets/compose.svg");
+}
+#title {
+	margin: 0;
+}
+
+#chat-list {
+	padding: var(--padding-default);
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: stretch;
+	align-content: flex-start;
+	gap: var(--padding-default);
+}
+#chat-list > * {
+	flex-grow: 1;
+}

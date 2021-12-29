@@ -1,0 +1,40 @@
+@import "https://fonts.googleapis.com/css?family=Comfortaa";
+/* Define a site-wide theme here - colors, fonts, defaults, ect. */
+html {
+	/* Site-wide variables */
+	--icon-size: 2em;
+	--chat-icon-size: 3em;
+
+	--padding-default: 0.5em;
+
+	--border-radius-default: 0.75em;
+
+	--box-shadow-smallest: 0 0 0.06em 0 black;
+	--box-shadow-default: 0 0 0.25em 0 black;
+	--box-shadow-largest: 0 0 1em 0 black;
+
+	--h1-font: "Comfortaa";
+}
+html.light {
+	/* Site-wide variables for light theme */
+}
+html.dark {
+	/* Site-wide variables for dark theme */
+}
+
+html,
+body {
+	margin: 0;
+}
+html {
+	overflow: scroll;
+	padding: 0;
+}
+body {
+	height: 100%;
+	overflow: auto;
+}
+
+h1 {
+	font-family: var(--h1-font);
+}
