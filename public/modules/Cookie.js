@@ -29,7 +29,7 @@ class Cookie {
 	 */
 	static get cookies() {
 		const cookies = {};
-		for (let cookieString of document.cookie.split(";")) {
+		for (let cookieString of document.cookie.split(/; ?/)) {
 			const cookieSplit = cookieString.split("=");
 			const name = cookieSplit[0],
 				value = cookieSplit[1];
@@ -45,6 +45,22 @@ class Cookie {
 	 */
 	static get(name) {
 		return Cookie.cookies[name];
+	}
+
+	/**
+	 * Creates a new cookie in the browser. If the cookie already exists, it will be overridden.
+	 * @param {String} name The name of the cookie.
+	 * @param {String} value The content of the cookie.
+	 * @param {Object} options The metadata of the cookie (e.g. expiration date);
+	 * @returns {Cookie[]} Returns an array of all the `Cookie`s that were just made.
+	 */
+	static set(...cookies) {
+		const output = [];
+		for (const cookie of cookies) {
+			output.push(new Cookie(cookie.name, cookie.value, cookie.options));
+		}
+		alert(document.cookie);
+		return output;
 	}
 }
 export default Cookie;

@@ -1,4 +1,4 @@
-import { encrypt, decrypt } from "./encryptor.js";
+import { encrypt } from "./encryptor.js";
 
 class NotFoundError extends Error {
 	constructor(msg) {
@@ -16,11 +16,15 @@ const database = {
 	 * @param {String?} newValue The new value of the key being set (optional). If set, `key` must also be set.
 	 */
 	user: async (uid, pass, key = "*", newValue) => {
-		pass = encrypt(pass);
-		const res = await fetch(`/db/users/${uid}/${pass}/${key}`);
-		const json = await res.json();
-		if (key === "*") return json;
-		else return json[key];
+		if (newValue) {
+			// Update value
+		} else {
+			pass = encrypt(pass);
+			const res = await fetch(`/db/users/${uid}/${pass}/${key}`);
+			const json = await res.json();
+			if (key === "*") return json;
+			else return json[key];
+		}
 	},
 	/**
 	 * Check to see if a user's credentials are correct.

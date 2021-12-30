@@ -1,16 +1,22 @@
+import "./modules/components.js";
 import db from "./modules/database.js";
-import _NavComponents from "./modules/NavComponents.js";
-import ChatListElement from "./components/ChatListElement/main.js";
 import Cookie from "./modules/Cookie.js";
+import auth from "./modules/auth.js";
+import { decrypt } from "./modules/encryptor.js";
 
-const login = () => (location.href = "./login");
+const login = () => /*location.href = "./login"*/ undefined;
 
-const uid = Cookie.get("uid");
-if (uid == undefined || uid.length != 4 || isNaN(Number(uid))) login();
+const username = Cookie.get("username").value;
+if (username == undefined || username == "") login();
 
 (async () => {
-	const pass = Cookie.get("pass");
-	if (!pass) login();
+	const password = decrypt(Cookie.get("password").value);
+	if (password == undefined || password == "") login();
 
 	// Auth
+	if (!auth(username, password, true)) login();
+	else {
+		// Do stuff
+		alert("Hi!");
+	}
 })();

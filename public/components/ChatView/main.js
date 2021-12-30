@@ -18,3 +18,4 @@ class ChatView extends HTMLElement {
 	}
 	connectedCallback() {}
 }
+export default ChatView;
