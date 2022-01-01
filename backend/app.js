@@ -9,7 +9,7 @@ app.listen(port, () => console.log(`Messaging App starting on port ${port}.`));
 const user = require("./user");
 app.use(user);
 
-const auth = require("./auth");
+const auth = require("./functions/auth");
 // Get by username
 app.get("/auth/username-:username/:pass", async (req, res) => {
 	const { username, pass } = req.params;
