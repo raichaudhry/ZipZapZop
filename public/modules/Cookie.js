@@ -59,7 +59,6 @@ class Cookie {
 		for (const cookie of cookies) {
 			output.push(new Cookie(cookie.name, cookie.value, cookie.options));
 		}
-		alert(document.cookie);
 		return output;
 	}
 }
