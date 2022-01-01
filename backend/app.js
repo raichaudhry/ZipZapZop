@@ -2,9 +2,9 @@ const express = require("express");
 const app = express();
 const port = 8080;
 
-app.use(express.static("../public"));
-
 app.listen(port, () => console.log(`Messaging App starting on port ${port}.`));
+
+app.use(express.static("../public"));
 
 const user = require("./user");
 app.use(user);
