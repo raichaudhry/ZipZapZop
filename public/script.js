@@ -5,7 +5,7 @@ import auth from "./modules/db/auth.js";
 import { encrypt, decrypt } from "./modules/encryptor.js";
 import user from "./modules/db/user.js";
 
-const login = () => /*location.href = "./login"*/ undefined;
+const login = () => location.replace("./login");
 
 const username = Cookie.get("username").value;
 if (username == undefined || username == "") login();
