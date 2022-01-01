@@ -9,6 +9,9 @@ app.listen(port, () => console.log(`Messaging App starting on port ${port}.`));
 const user = require("./user");
 app.use(user);
 
+const chat = require("./chat");
+app.use(chat);
+
 const auth = require("./functions/auth");
 // Get by username
 app.get("/auth/username-:username/:pass", async (req, res) => {
