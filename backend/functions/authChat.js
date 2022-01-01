@@ -1,20 +1,24 @@
 const auth = require("./auth");
-const removeQuotes = require("./removeQuotes");
 
 const { Pool } = require("pg");
 const pool = new Pool({ port: 5433 });
 
-const authChat = async (cuid_, uuid_, pass_) => {
+const authChat = async (cuid, uuid, pass) => {
 	// Make sure the user exists
-	if (!(await auth(uuid_, pass_))) return false;
+	if (!(await auth(uuid, pass))) return false;
 
 	// Prevent SQL injection
-	const { cuid_: cuid, uuid_: uuid, pass_: pass } = removeQuotes({ cuid_, uuid_, pass_ });
+	cuid = cuid.replace("'", '"');
+	uuid = uuid.replace("'", '"');
+	pass = pass.replace("'", '"');
 
 	// Make sure chat exists
 	const client = await pool.connect();
 	const query = await client.query(`SELECT people FROM chats WHERE uid='${cuid}'`);
 	const res = query.rows[0];
+
+	client.release();
+
 	if (!res) return false;
 
 	// Make sure the user can access the chat
