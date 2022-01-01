@@ -14,6 +14,8 @@ html {
 	--box-shadow-largest: 0 0 1em 0 black;
 
 	--h1-font: "Comfortaa";
+
+	--background-root: white;
 }
 html.light {
 	/* Site-wide variables for light theme */
@@ -33,6 +35,7 @@ html {
 body {
 	height: 100%;
 	overflow: auto;
+	position: relative;
 }
 
 h1 {
