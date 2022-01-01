@@ -1,3 +1,5 @@
+const { decrypt } = require("./functions/encryptor");
+
 const { Pool } = require("pg");
 const pool = new Pool({ port: 5433 });
 
@@ -15,12 +17,12 @@ router.get("/db/users/username-:username/:pass/:key", async (req, res) => {
 	try {
 		// Remove quotes from parameter to prevent SQL injection.
 		username = username.replace("'", '"');
-		pass = pass.replace("'", '"');
+		pass = decrypt(pass.replace("'", '"'));
 		key = key.replace("'", '"');
 
 		// Add quotes in query to prevent SQL injection.
 		const query = await client.query(`SELECT ${key === "*" ? "*" : '"' + key + '"'} FROM users WHERE username='${username}' AND password='${pass}';`);
-		res.send(query.rows[0]);
+		res.send(JSON.stringify(query.rows[0]));
 	} finally {
 		// ALWAYS check out client
 		client.release();
@@ -51,12 +53,12 @@ router.get("/db/users/:uid/:pass/:key", async (req, res) => {
 	} finally {
 		// ALWAYS check out client.
 		client.release();
-	}	
-});	
+	}
+});
 // Redirect to get everything if there isn't a key.
 router.get("/db/users/:uid/:pass", async (req, res) => {
 	const { uid, pass } = req.params;
 	res.redirect(`/db/users/${uid}/${pass}/*`);
-});	
+});
 
 module.exports = router;
