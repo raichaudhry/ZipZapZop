@@ -1,5 +1,6 @@
 import "./modules/components.js";
 import db from "./modules/database.js";
+import db from "./modules/db/database.js";
 import Cookie from "./modules/Cookie.js";
 import auth from "./modules/auth.js";
 import { decrypt } from "./modules/encryptor.js";

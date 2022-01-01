@@ -1,6 +1,6 @@
-import database from "../modules/database.js";
+import database from "../modules/db/database.js";
 import Cookie from "../modules/Cookie.js";
-import auth from "../modules/auth.js";
+import auth from "../modules/db/auth.js";
 import { encrypt } from "../modules/encryptor.js";
 
 const uid = Cookie.get("uid");
