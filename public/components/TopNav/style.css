@@ -14,6 +14,8 @@
 	box-shadow: var(--box-shadow-default);
 
 	background-color: white;
+
+	z-index: 222;
 }
 :host > * {
 	vertical-align: middle;
