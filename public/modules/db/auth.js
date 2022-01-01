@@ -1,5 +1,5 @@
 // ECMAScript (JS)
-import { encrypt } from "./encryptor.js";
+import { encrypt } from "../encryptor.js";
 
 /**
  * Checks a user's credentials to see if they are correct.

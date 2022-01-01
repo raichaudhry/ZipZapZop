@@ -1,4 +1,4 @@
-import { encrypt } from "./encryptor.js";
+import { encrypt } from "../encryptor.js";
 
 class NotFoundError extends Error {
 	constructor(msg) {
