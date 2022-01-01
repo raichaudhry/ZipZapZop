@@ -7,7 +7,7 @@ const uid = Cookie.get("uuid").value;
 const pass = Cookie.get("password").value;
 if (uid && pass && database.auth(uid, pass)) {
 	// Logged in
-	location.href = "/";
+	location.replace("/");
 }
 /** @type {HTMLFormElement} */
 const form = document.getElementById("form"),
