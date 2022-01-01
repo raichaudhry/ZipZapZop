@@ -23,6 +23,7 @@ router.get("/db/chats/:cuid/:uuid/:pass/:key", async (req, res) => {
 		// Check user authorization
 		if (!authChat(cuid, uuid, pass)) res.status(403).send("");
 		else {
+			const query = await client.query(`SELECT ${key === "*" ? "*" : `"${key}"`} FROM chats WHERE uid='${cuid}'`);
 			res.send(JSON.stringify(query.rows[0]));
 		}
 	} finally {
