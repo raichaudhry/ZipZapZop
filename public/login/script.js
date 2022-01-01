@@ -3,8 +3,8 @@ import Cookie from "../modules/Cookie.js";
 import auth from "../modules/db/auth.js";
 import { encrypt } from "../modules/encryptor.js";
 
-const uid = Cookie.get("uid");
-const pass = Cookie.get("pass");
+const uid = Cookie.get("uuid").value;
+const pass = Cookie.get("password").value;
 if (uid && pass && database.auth(uid, pass)) {
 	// Logged in
 	location.href = "/";
