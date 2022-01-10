@@ -1,0 +1,23 @@
+services:
+    app:
+        image: node
+        command: sh -c "npm install && npm run dev"
+        ports:
+            - 8080:8080
+        working_dir: /Messaging App
+        volumes:
+            - ./:/Messaging App
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: docker
+            POSTGRES_DATABASE: app
+    psql:
+        image: postgres
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: docker
+            POSTGRES_DATABASE: app
+        volumes:
+            # - ./backend/psql/data:/var/lib/postgresql/data
+            # copy the sql script to create tables
+            - ./backend/psql/app.sql:/docker-entrypoint-initdb.d/app.sql

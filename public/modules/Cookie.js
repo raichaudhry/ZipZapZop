@@ -28,6 +28,8 @@ class Cookie {
 	 * @type {Cookie[]}
 	 */
 	static get cookies() {
+		if (document.cookie === "") return {};
+
 		const cookies = {};
 		for (let cookieString of document.cookie.split(/; ?/)) {
 			const cookieSplit = cookieString.split("=");
@@ -41,7 +43,7 @@ class Cookie {
 	/**
 	 * Returns a cookie from the browser. If not found, it will return undefined.
 	 * @param {String} name The name of the cookie.
-	 * @returns {Cookie}
+	 * @returns {Cookie?}
 	 */
 	static get(name) {
 		return Cookie.cookies[name];

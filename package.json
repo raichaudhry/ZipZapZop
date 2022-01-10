@@ -9,7 +9,11 @@
 	"private": true,
 	"dependencies": {
 		"express": "^4.17.2",
-		"pg": "^8.7.1"
+		"pg": "^8.7.1",
+		"wait-port": "^0.2.9"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.15"
 	},
 	"engines": {
 		"node": "^17.3.0",
@@ -23,6 +27,13 @@
 	"bugs": "https://github.com/gavinmorrow/Messaging-App/issues",
 	"repository": "github:gavinmorrow/Messaging-App",
 	"scripts": {
-		"start": "node backend/app.js"
+		"start": "npm run wait-port-psql && node backend/app.js",
+		"dev": "npm run wait-port-psql && nodemon backend/app.js",
+		"wait-port-psql": "wait-port psql:5432"
+	},
+	"nodemonConfig": {
+		"ignore": [
+			"public/*"
+		]
 	}
 }

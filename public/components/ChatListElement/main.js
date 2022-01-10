@@ -14,9 +14,10 @@ if (!document.getElementById("x-chat-list-element-template")) {
 class ChatListElement extends HTMLElement {
 	/**
 	 * @param {string} name The name of the chat.
+	 * @param {String} cuid The uuid of the chat.
 	 * @param {string} iconSrc The URL of the chat icon.
 	 */
-	constructor(name, id, iconSrc) {
+	constructor(name, cuid, iconSrc) {
 		super();
 
 		if (name) {
@@ -39,7 +40,7 @@ class ChatListElement extends HTMLElement {
 		shadowRoot.appendChild(template.content.cloneNode(true));
 
 		this.addEventListener("click", () => {
-			const event = new CustomEvent("open-chat", { bubbles: true, composed: true, detail: { id } });
+			const event = new CustomEvent("open-chat", { bubbles: true, composed: true, detail: { cuid, name } });
 			this.dispatchEvent(event);
 		});
 	}

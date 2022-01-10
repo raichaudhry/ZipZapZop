@@ -1,20 +1,23 @@
-import database from "../modules/db/database.js";
 import Cookie from "../modules/Cookie.js";
 import auth from "../modules/db/auth.js";
-import { encrypt } from "../modules/encryptor.js";
+import { decrypt, encrypt } from "../modules/encryptor.js";
 
-const uid = Cookie.get("uuid").value;
-const pass = Cookie.get("password").value;
-if (uid && pass && database.auth(uid, pass)) {
+const cookies = {
+	uid: Cookie.get("uuid"),
+	pass: Cookie.get("password"),
+};
+if (cookies.uid && cookies.pass && auth(cookies.uid.value, decrypt(cookies.pass.value))) {
 	// Logged in
 	location.replace("/");
 }
+
 /** @type {HTMLFormElement} */
 const form = document.getElementById("form"),
 	/** @type {HTMLInputElement} */
 	usernameInput = document.getElementById("username"),
 	/** @type {HTMLInputElement} */
 	passInput = document.getElementById("password");
+
 form.addEventListener("submit", async () => {
 	const username = usernameInput.value,
 		password = passInput.value;

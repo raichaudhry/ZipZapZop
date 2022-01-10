@@ -17,3 +17,4 @@ export const decrypt = str => {
 	}
 	return output;
 };
+
