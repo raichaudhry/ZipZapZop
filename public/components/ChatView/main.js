@@ -93,8 +93,6 @@ class ChatView extends HTMLElement {
 		this.appendChild(msgForm);
 	}
 	async loadMessages() {
-		this.shadowRoot.host.querySelectorAll("chat-message").forEach(elem => elem.remove());
-
 		const uuid = Cookie.get("uuid").value,
 			password = Cookie.get("password").value;
 		const res = await fetch(`/db/chats/${this.cuid}/${uuid}/${password}/messages`);
@@ -121,6 +119,9 @@ class ChatView extends HTMLElement {
 
 		/** @type {message[]} */
 		const messages = (await res.json()).messages || [];
+
+		// Clear all previous messages
+		this.shadowRoot.host.querySelectorAll("chat-message").forEach(elem => elem.remove());
 
 		for (const message of messages) {
 			const elem = new Message(message);
