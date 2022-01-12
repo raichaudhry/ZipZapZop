@@ -1,0 +1,10 @@
+@import "/theme.css";
+
+:host {
+	width: fit-content;
+	background-color: yellow;
+	color: red;
+	display: inline-block;
+	padding: var(--padding-default);
+	border-radius: var(--border-radius-default);
+}
