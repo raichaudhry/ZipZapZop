@@ -56,6 +56,7 @@ class ChatView extends HTMLElement {
 			try {
 				// Get new message content
 				const msg = msgInput.value;
+				msgInput.value = "";
 
 				// Get date from server
 				const date = await (async () => {
