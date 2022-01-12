@@ -18,6 +18,5 @@ services:
             POSTGRES_PASSWORD: docker
             POSTGRES_DATABASE: app
         volumes:
-            # - ./backend/psql/data:/var/lib/postgresql/data
             # copy the sql script to create tables
-            - ./backend/psql/app.sql:/docker-entrypoint-initdb.d/app.sql
+            - ./backend/app.sql:/docker-entrypoint-initdb.d/app.sql
