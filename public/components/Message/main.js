@@ -1,3 +1,5 @@
+import Error from "../Error/main.js";
+
 const PATH = "/components/Message";
 if (!document.getElementById("x-message-template")) {
 	let template = document.createElement("template");
@@ -22,13 +24,13 @@ class Message extends HTMLElement {
 	constructor(msg) {
 		super();
 
-		const { content } = msg;
+		const content = document.createElement("div");
+		content.id = "content";
+		content.textContent = msg.content ?? "<zop-error>Message failed to load</zop-error>";
 
-		if (content) {
-			const span = document.createElement("div");
-			span.textContent = content;
-			this.appendChild(span);
-		}
+		const author = document.createElement("div");
+
+		this.appendChild(content);
 
 		// Shadow DOM
 		let shadowRoot = this.attachShadow({ mode: "open" });
