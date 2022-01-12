@@ -16,9 +16,10 @@ if (!document.getElementById("x-chat-view-template")) {
 	template.id = "x-chat-view-template";
 	template.innerHTML = `
 	<link rel="stylesheet" href="${PATH}/style.css">
-	<slot><!-- Messages --></slot>
+	<slot name="messages"></slot>
+	<slot name="form"></slot>
 
-	<form id="msg-form" action="javascript:void(0)" autocomplete="off">
+	<form id="msg-form" action="javascript:void(0)" autocomplete="off" slot="form">
 		<input type="text" placeholder="Message" id="msg-input">
 		<input type="submit" value="Send!">
 	</form>`;
@@ -123,6 +124,7 @@ class ChatView extends HTMLElement {
 
 		for (const message of messages) {
 			const elem = new Message(message);
+			elem.slot = "messages";
 			this.appendChild(elem);
 		}
 
