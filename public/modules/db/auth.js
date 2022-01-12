@@ -1,5 +1,6 @@
 // ECMAScript (JS)
-import { encrypt } from "../encryptor.js";
+import { encrypt, decrypt } from "../encryptor.js";
+import user from "./user.js";
 
 /**
  * Checks a user's credentials to see if they are correct.
@@ -9,19 +10,27 @@ import { encrypt } from "../encryptor.js";
  * @returns {Boolean} True if credentials are correct, false if not.
  */
 const auth = async (id, password, username = false) => {
-	password = encrypt(password);
+	try {
+		password = encrypt(password);
 
-	let uuid = id;
-	if (username) {
-		console.warn("The `username` parameter is deprecated.");
-		const res = await fetch(`/db/users/username-${id}/${password}/uid`);
-		uuid = (await res.json()).uid;
+		let uuid = id;
+		if (username) {
+			console.warn("The `username` parameter is deprecated.");
+			uuid =
+				(await user(id, decrypt(password), "uid", true)) ??
+				(() => {
+					throw new Error(`\`uid\` not found for user '${id}' with password '${password}'`);
+				})();
+		}
+
+		const res = await fetch(`/auth/${uuid}/${password}`);
+		const status = res.status;
+		if (status == 200) return true;
+		else if (status == 403) return false;
+		else return null;
+	} catch (e) {
+		console.error(e);
+		return false;
 	}
-
-	const res = await fetch(`/auth/${uuid}/${password}`);
-	const status = res.status;
-	if (status == 200) return true;
-	else if (status == 403) return false;
-	else return null;
 };
 export default auth;

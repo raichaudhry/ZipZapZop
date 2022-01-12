@@ -2,14 +2,15 @@ import Cookie from "../modules/Cookie.js";
 import auth from "../modules/db/auth.js";
 import { decrypt, encrypt } from "../modules/encryptor.js";
 
+const finishLogin = () => location.replace("/" + (new URLSearchParams(location.href).get("from") || ""));
+
 const cookies = {
 	uid: Cookie.get("uuid"),
+	username: Cookie.get("username"),
 	pass: Cookie.get("password"),
 };
-if (cookies.uid && cookies.pass && auth(cookies.uid.value, decrypt(cookies.pass.value))) {
-	// Logged in
-	location.replace("/");
-}
+
+if ((cookies.uid || cookies.username) && cookies.pass && (await auth(cookies.uid?.value ?? cookies.username?.value, decrypt(cookies.pass.value), cookies.username?.value))) finishLogin(); // Already logged in
 
 /** @type {HTMLFormElement} */
 const form = document.getElementById("form"),
@@ -20,8 +21,9 @@ const form = document.getElementById("form"),
 
 form.addEventListener("submit", async () => {
 	const username = usernameInput.value,
-		password = passInput.value;
-	if (auth(username, password, true)) {
+		password = encrypt(passInput.value);
+	if (await auth(username, decrypt(password), true)) {
+		document.getElementById("error").innerHTML = "";
 		Cookie.set(
 			{
 				name: "username",
@@ -32,13 +34,13 @@ form.addEventListener("submit", async () => {
 			},
 			{
 				name: "password",
-				value: encrypt(password),
+				value: password,
 				options: {
 					path: "/",
 				},
 			}
 		);
-		location.href = "/" + (new URLSearchParams(location.href).get("from") || "");
+		finishLogin();
 	} else {
 		document.getElementById("error").innerHTML = "Incorrect username or password.";
 	}

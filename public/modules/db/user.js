@@ -1,21 +1,20 @@
 import { encrypt } from "../encryptor.js";
-const user = async (id, password, key, newValue, username = false) => {
+
+// `username_` is for backwards compatibility
+const user = async (id, password, key, username = false, username_ = false) => {
+	username = username || username_;
 	password = encrypt(password);
-	if (newValue) {
-		const res = await fetch(`/db/write/users/${username ? "username-" : ""}${id}/${password}/${key}/${newValue}`);
-		if (res.status == 204) return true;
-		else if (res.status == 500) return false;
-		else return null;
-	} else {
+	try {
 		const res = await fetch(`/db/users/${username ? "username-" : ""}${id}/${password}/${key}`);
-		const json = await res.text();
-		try {
-			if (key !== "*") return JSON.parse(json)[key];
-			return JSON.parse(json);
-		} catch (e) {
-			console.error(e);
-			return {};
-		}
+		const text = await res.text();
+		// `var` for debugging (so it can be accessed in the `catch`)
+		var json = JSON.parse(text);
+		if (key !== "*") return json[key];
+		return json;
+	} catch (e) {
+		if (e instanceof SyntaxError) console.error(`Probable JSON parse error. \nJSON: ${json}\n${e}`);
+		else console.error(e);
+		return {};
 	}
 };
 export default user;

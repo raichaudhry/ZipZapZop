@@ -24,19 +24,24 @@ router.get("/db/users/:id/:pass/:key", async (req, res) => {
 	const client = await pool.connect();
 	try {
 		// Add quotes to prevent SQL injection.
-		const query = `SELECT ${key === "*" ? "*" : '"' + key + '"'} FROM users WHERE ${username ? "username" : "uid"}='${id}' AND password='${pass}';`;
-		const output = (await client.query(query)).rows[0];
-		res.send(output);
+		console.log(`SELECT ${key === "*" ? "*" : '"' + key + '"'} FROM users WHERE ${username ? "username" : "uid"}='${id}' AND password='${pass}'`);
+		const query = await client.query(`SELECT ${key === "*" ? "*" : '"' + key + '"'} FROM users WHERE ${username ? "username" : "uid"}='${id}' AND password='${pass}'`);
+		const output = query.rows[0];
+
+		if (query.rowCount == 1) res.send(output);
+		else throw new Error(`\`query.rowCount\` != 1\n\`query.rowCount\`: '${query.rowCount}'\n\`query.rows\`: ${query.rows ?? []}`);
 	} catch (err) {
 		console.error(err);
-	} finally {
+		console.log(id);
+		res.status(500).send("{}");
 		// ALWAYS check out client.
+	} finally {
 		client.release();
 	}
 });
 router.get("/db/users/:id/:pass/", (req, res) => {
-	const { uuid, pass } = req.params;
-	res.redirect(`/db/users/${uuid}/${pass}/*`);
+	const { id, pass } = req.params;
+	res.redirect(`/db/users/${id}/${pass}/*`);
 });
 
 // Set a new value
