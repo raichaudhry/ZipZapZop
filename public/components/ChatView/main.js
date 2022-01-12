@@ -110,7 +110,8 @@ class ChatView extends HTMLElement {
 		// Add messages
 		/**
 		 * @typedef {Object} message
-		 * @property {String} sender The uuid of the user who sent the message
+		 * @property {String} muid The UUID of the message.
+		 * @property {String} sender The UUID of the user who sent the message
 		 * @property {String} content The content of the message
 		 * @property {Number} timeSent The time the message was sent, taken from `Date.now()`
 		 * @property {Number} serverTime The time the message was sent, taken from the server.
