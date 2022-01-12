@@ -1,6 +1,7 @@
 import Cookie from "../../modules/Cookie.js";
 import Message from "../Message/main.js";
 import user from "../../modules/db/user.js";
+import { encodeAscii } from "../../modules/ascii.js";
 
 class AuthError extends Error {
 	constructor(msg) {
@@ -61,15 +62,6 @@ class ChatView extends HTMLElement {
 					return Number(res.text());
 				})();
 
-				const encodeAscii = unicode => {
-					let ascii = "";
-					for (const char of unicode) {
-						ascii += " ";
-						ascii += char.codePointAt(0);
-					}
-					ascii = ascii.substring(1);
-					return ascii;
-				};
 				// Push to server
 				const res = await fetch(`/db/write/send-message`, {
 					method: "PUT",

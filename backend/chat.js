@@ -1,4 +1,6 @@
 const authChat = require("./functions/authChat");
+const { decodeAscii } = require("./functions/ascii");
+
 const { Pool, options } = require("./poolOptions");
 const pool = new Pool(options);
 
@@ -69,7 +71,6 @@ router.put("/db/write/chats/:cuid/:uuid/:pass/:key/:newValue", async (req, res) 
 	}
 });
 router.put("/db/write/send-message", async (req, res) => {
-	const decodeAscii = ascii => String.fromCodePoint(...ascii.split(" "));
 	/**
 	 * @typedef {Object} message
 	 * @property {String} sender The uuid of the user who sent the message
