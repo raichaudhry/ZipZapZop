@@ -24,7 +24,6 @@ router.get("/db/users/:id/:pass/:key", async (req, res) => {
 	const client = await pool.connect();
 	try {
 		// Add quotes to prevent SQL injection.
-		console.log(`SELECT ${key === "*" ? "*" : '"' + key + '"'} FROM users WHERE ${username ? "username" : "uid"}='${id}' AND password='${pass}'`);
 		const query = await client.query(`SELECT ${key === "*" ? "*" : '"' + key + '"'} FROM users WHERE ${username ? "username" : "uid"}='${id}' AND password='${pass}'`);
 		const output = query.rows[0];
 
