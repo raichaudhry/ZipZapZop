@@ -1,5 +1,6 @@
 const authChat = require("./functions/authChat");
 const { decodeAscii } = require("./functions/ascii");
+const { v4: genUuid } = require("uuid");
 
 const { Pool, options } = require("./poolOptions");
 const pool = new Pool(options);
@@ -91,6 +92,9 @@ router.put("/db/write/send-message", async (req, res) => {
 
 	/** @type {message} */
 	const msg = JSON.parse(msg_);
+
+	// Add MUID to the message
+	msg.muid = genUuid();
 
 	const client = await pool.connect();
 	try {
