@@ -11,19 +11,17 @@ import user from "./user.js";
  */
 const auth = async (id, password, username = false) => {
 	try {
-		password = encrypt(password);
-
 		let uuid = id;
 		if (username) {
 			console.warn("The `username` parameter is deprecated.");
 			uuid =
-				(await user(id, decrypt(password), "uid", true)) ??
+				(await user(id, password, "uid", true)) ??
 				(() => {
 					throw new Error(`\`uid\` not found for user '${id}' with password '${password}'`);
 				})();
 		}
 
-		const res = await fetch(`/auth/${uuid}/${password}`);
+		const res = await fetch(`/auth/${uuid}/${encodeURI(password)}`);
 		const status = res.status;
 		if (status == 200) return true;
 		else if (status == 403) return false;

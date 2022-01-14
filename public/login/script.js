@@ -10,7 +10,7 @@ const cookies = {
 	pass: Cookie.get("password"),
 };
 
-if ((cookies.uid || cookies.username) && cookies.pass && (await auth(cookies.uid?.value ?? cookies.username?.value, decrypt(cookies.pass.value), cookies.username?.value))) finishLogin(); // Already logged in
+if ((cookies.uid || cookies.username) && cookies.pass && (await auth(cookies.uid?.value ?? cookies.username?.value, cookies.pass.value, cookies.uid?.value ? false : true))) finishLogin(); // Already logged in
 
 /** @type {HTMLFormElement} */
 const form = document.getElementById("form"),
@@ -22,7 +22,7 @@ const form = document.getElementById("form"),
 form.addEventListener("submit", async () => {
 	const username = usernameInput.value,
 		password = encrypt(passInput.value);
-	if (await auth(username, decrypt(password), true)) {
+	if (await auth(username, password, true)) {
 		document.getElementById("error").innerHTML = "";
 		Cookie.set(
 			{
