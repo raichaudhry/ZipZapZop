@@ -28,6 +28,17 @@ if (!document.getElementById("x-chat-view-template")) {
 
 class ChatView extends HTMLElement {
 	/**
+	 * @typedef {Object} message
+	 * @property {String} muid The UUID of the message.
+	 * @property {String} author The UUID of the user who sent the message
+	 * @property {String} content The content of the message
+	 * @property {Number} timeSent The time the message was sent, taken from `Date.now()`
+	 * @property {Number} serverTime The time the message was sent, taken from the server.
+	 * @property {String} original The original message
+	 * @property {Boolean} deleted Was the message deleted?
+	 */
+
+	/**
 	 * @param {String} cuid The UID of the chat.
 	 * @param {HTMLHeadingElement} title An `<h1>` that will serve
 	 */
@@ -73,7 +84,7 @@ class ChatView extends HTMLElement {
 						password,
 						/** @type {message} */
 						msg: JSON.stringify({
-							sender: uuid,
+							author: uuid,
 							content: encodeAscii(msg),
 							timeSent: Date.now(),
 							serverTime: date,
@@ -108,17 +119,6 @@ class ChatView extends HTMLElement {
 		document.getElementById("title").textContent = this.title;
 
 		// Add messages
-		/**
-		 * @typedef {Object} message
-		 * @property {String} muid The UUID of the message.
-		 * @property {String} sender The UUID of the user who sent the message
-		 * @property {String} content The content of the message
-		 * @property {Number} timeSent The time the message was sent, taken from `Date.now()`
-		 * @property {Number} serverTime The time the message was sent, taken from the server.
-		 * @property {String} original The original message
-		 * @property {Boolean} deleted Was the message deleted?
-		 */
-
 		/** @type {message[]} */
 		const messages = (await res.json()).messages || [];
 
