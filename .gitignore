@@ -2,3 +2,4 @@ postgresql.log
 .DS_Store
 Database/*
 .vscode/*
+node_modules
