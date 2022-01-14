@@ -120,7 +120,7 @@ class ChatView extends HTMLElement {
 
 		// Add messages
 		/** @type {message[]} */
-		const messages = (await res.json()).messages || [];
+		const messages = (await res.json()).messages ?? [];
 
 		// Clear all previous messages
 		this.shadowRoot.host.querySelectorAll("chat-message").forEach(elem => elem.remove());
