@@ -1,4 +1,6 @@
-import Error from "../Error/main.js";
+import Cookie from "../../modules/Cookie.js";
+import user from "../../modules/db/user.js";
+import _Error from "../Error/main.js";
 
 const PATH = "/components/Message";
 if (!document.getElementById("x-message-template")) {
@@ -13,7 +15,8 @@ if (!document.getElementById("x-message-template")) {
 class Message extends HTMLElement {
 	/**
 	 * @typedef {Object} message
-	 * @property {String} sender The uuid of the user who sent the message
+	 * @property {String} muid The UUID of the message.
+	 * @property {String} author The UUID of the user who sent the message
 	 * @property {String} content The content of the message
 	 * @property {Number} timeSent The time the message was sent, taken from `Date.now()`
 	 * @property {Number} serverTime The time the message was sent, taken from the server.
@@ -24,21 +27,37 @@ class Message extends HTMLElement {
 	constructor(msg) {
 		super();
 
-		const content = document.createElement("div");
-		content.id = "content";
-		content.textContent = msg.content ?? "<zop-error>Message failed to load</zop-error>";
-
-		const author = document.createElement("div");
-
-		this.appendChild(content);
+		this.msg = msg;
 
 		// Shadow DOM
 		let shadowRoot = this.attachShadow({ mode: "open" });
 		/** @type HTMLTemplateElement */
 		let template = document.getElementById("x-message-template");
 		shadowRoot.appendChild(template.content.cloneNode(true));
+
+		// Set id of `chat-message`
+		this.shadowRoot.host.id = `zop-message-${msg.muid}`;
+
+		const content = document.createElement("div");
+		content.id = "content";
+		if (msg.content) content.textContent = msg.content;
+		else content.innerHTML = "<zop-error>Message failed to load</zop-error>";
+
+		const author = document.createElement("div");
+		author.id = "author";
+		if (msg.author) author.textContent = msg.author;
+		else author.innerHTML = "<zop-error>No author found for message</zop-error>";
+
+		this.appendChild(content);
+		this.appendChild(author);
 	}
-	connectedCallback() {}
+	async connectedCallback() {
+		this.shadowRoot.host.id = `msg-${this.msg.muid}`;
+
+		// Get username of author
+		const author = await user(this.msg.author, Cookie.get("password")?.value ?? "", "username");
+		this.getElementById("author").textContent = author;
+	}
 }
 customElements.define("chat-message", Message);
 export default Message;
