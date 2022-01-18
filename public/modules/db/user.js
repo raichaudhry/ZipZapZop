@@ -1,5 +1,3 @@
-import { encrypt } from "../encryptor.js";
-
 // `username_` is for backwards compatibility
 const user = async (id, password, key, username = false, username_ = false) => {
 	username = username || username_;
