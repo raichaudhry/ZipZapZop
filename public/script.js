@@ -15,7 +15,7 @@ const login = async () => {
 
 const main = async () => {
 	const username = cookies.username.value;
-	const password = decrypt(cookies.password.value);
+	const password = cookies.password.value;
 
 	cookies.uuid = Cookie.get("uuid") || Cookie.set({ name: "uuid", value: await user(username, password, "uid", undefined, true) })[0];
 
@@ -23,7 +23,7 @@ const main = async () => {
 	const chats = (await user(username, password, "chats", undefined, true)) || [];
 
 	for (const cuid of chats) {
-		const req = await fetch(`/db/chats/${cuid}/${uuid}/${encrypt(password)}/`);
+		const req = await fetch(`/db/chats/${cuid}/${uuid}/${password}/`);
 		if (req.status < 200 || req.status >= 300) continue;
 
 		const data = await req.json();
@@ -46,6 +46,6 @@ const main = async () => {
 	if (cookies.username == undefined || cookies.password == undefined) login();
 
 	// Auth
-	if (!(await auth(cookies.username.value, decrypt(cookies.password.value), true))) login();
+	if (!(await auth(cookies.username.value, cookies.password.value, true))) login();
 	else main();
 })();
