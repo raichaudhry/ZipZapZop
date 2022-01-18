@@ -28,7 +28,7 @@ router.get("/db/users/:id/:pass/:key", async (req, res) => {
 		const output = query.rows[0];
 
 		if (query.rowCount == 1) res.send(output);
-		else throw new Error(`\`query.rowCount\` != 1\n\`query.rowCount\`: '${query.rowCount}'\n\`query.rows\`: ${query.rows ?? []}`);
+		else throw new Error(`\`query.rowCount\` != 1\n\`query.rowCount\`: '${query.rowCount}'\n\`query.rows\`: [${query.rows ?? []}]`);
 	} catch (err) {
 		console.error(err);
 		res.status(500).send("{}");
