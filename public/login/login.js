@@ -1,7 +1,7 @@
-import Cookie from "../modules/Cookie";
-import auth from "../modules/db/auth";
+import Cookie from "../modules/Cookie.js";
+import auth from "../modules/db/auth.js";
 
-const login = (username, password) => {
+const login = async (username, password) => {
 	if (await auth(username, password, true)) {
 		Cookie.set(
 			{
