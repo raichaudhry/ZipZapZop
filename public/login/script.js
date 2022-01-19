@@ -1,8 +1,7 @@
 import Cookie from "../modules/Cookie.js";
 import auth from "../modules/db/auth.js";
+import login from "./login.js";
 import { decrypt, encrypt } from "../modules/encryptor.js";
-
-const finishLogin = () => location.replace("/" + (new URLSearchParams(location.href).get("from") || ""));
 
 const cookies = {
 	uid: Cookie.get("uuid"),
@@ -22,25 +21,11 @@ const form = document.getElementById("form"),
 form.addEventListener("submit", async () => {
 	const username = usernameInput.value,
 		password = encrypt(passInput.value);
-	if (await auth(username, password, true)) {
+	if ((await auth(username, password, true)) && (await login(username, password))) {
 		document.getElementById("error").innerHTML = "";
-		Cookie.set(
-			{
-				name: "username",
-				value: username,
-				options: {
-					path: "/",
-				},
-			},
-			{
-				name: "password",
-				value: password,
-				options: {
-					path: "/",
-				},
-			}
-		);
-		finishLogin();
+
+		// Redirect to original page.
+		location.replace("/" + (new URLSearchParams(document.location.search).get("from") ?? ""));
 	} else {
 		document.getElementById("error").innerHTML = "Incorrect username or password.";
 	}
