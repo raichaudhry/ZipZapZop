@@ -70,4 +70,28 @@ router.put("/db/write/users/:id/:pass/:key/:newValue", async (req, res) => {
 	}
 });
 
+// Create an account
+router.post("/db/write/create-account", async (req, res) => {
+	let { username, password } = req.headers;
+
+	// Verify that the username matches the criteria
+	if (!/\w+/.test(username) && username.indexOf("username-") === 0 && username.length <= 42) return res.sendStatus(422);
+
+	// Remove single quotes from both
+	// Don't need to do it for the username b/c it already is only alphanumeric.
+	password = password.replaceAll("'", '"');
+
+	const client = await pool.connect();
+	try {
+		await client.query(`INSERT INTO users(username, password) VALUES ('${username}', '${password}')`);
+		res.sendStatus(204);
+	} catch (err) {
+		res.status(500).send(`${err}`);
+		console.error(err);
+	} finally {
+		// ALWAYS check out client.
+		client.release();
+	}
+});
+
 module.exports = router;
