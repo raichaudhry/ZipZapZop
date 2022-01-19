@@ -1,14 +1,15 @@
 :host {
-	background-color: rgb(245, 245, 245);
+	background-color: var(--background-default);
 	display: block;
 	padding: var(--padding-default);
 	border-radius: var(--border-radius-default);
-	transition: background-color 0.1s;
+	transition: background-color 0.22s;
 	text-align: center;
+	box-shadow: var(--box-shadow-smallest);
 }
 :host(:hover),
 :host(:focus) {
-	background-color: rgb(222, 222, 222);
+	background-color: var(--background-higher);
 }
 
 ::slotted([slot="icon"]) {

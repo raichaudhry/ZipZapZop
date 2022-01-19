@@ -13,7 +13,7 @@
 
 	box-shadow: var(--box-shadow-default);
 
-	background-color: white;
+	background-color: var(--background-nav);
 
 	z-index: 222;
 }
