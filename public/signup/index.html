@@ -10,17 +10,18 @@
 		<h1>Sign Up</h1>
 		<form action="javascript:void(0)" id="form">
 			<label for="username">Username:</label>
-			<input type="text" autocomplete="username" name="username" id="username" />
+			<input type="text" autocomplete="off" name="username" id="username" />
 			<br />
 			<label for="password">Password:</label>
-			<input type="password" autocomplete="new-password" name="password" id="password" />
+			<input type="password" autocomplete="new-password" name="password" id="password" oncopy="return false" />
 			<br />
 			<label for="password">Verify Password:</label>
-			<input type="password" autocomplete="new-password" name="password" id="password" />
+			<input type="password" autocomplete="new-password" name="verify-password" id="verify-password" oncopy="return false" />
 			<br />
 			<input type="submit" value="Sign up!" />
 		</form>
+		<div id="error" class="error"></div>
 		<footer>Already have an account? <a href="/login">Login!</a></footer>
-		<script src="script.js"></script>
+		<script src="script.js" type="module"></script>
 	</body>
 </html>
