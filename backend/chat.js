@@ -18,10 +18,10 @@ router.get("/db/chats/:cuid/:id/:pass/:key", async (req, res) => {
 		const username = id.indexOf("username-") === 0;
 		if (username) id = id.replace("username-", "");
 
-		cuid = cuid.replace("'", '"');
-		id = id.replace("'", '"');
-		pass = pass.replace("'", '"');
-		key = key.replace('"', "'");
+		cuid = cuid.replaceAll("'", '"');
+		id = id.replaceAll("'", '"');
+		pass = pass.replaceAll("'", '"');
+		key = key.replaceAll('"', "'");
 
 		// Check user authorization
 		if (!authChat(cuid, id, pass)) res.status(403).send("");
@@ -48,11 +48,11 @@ router.put("/db/write/chats/:cuid/:uuid/:pass/:key/:newValue", async (req, res) 
 	let { cuid, uuid, pass, key, newValue } = req.params;
 	const client = await pool.connect();
 	try {
-		cuid = cuid.replace("'", '"');
-		uuid = uuid.replace("'", '"');
-		pass = pass.replace("'", '"');
-		key = key.replace('"', "'");
-		newValue = newValue.replace("'", '"');
+		cuid = cuid.replaceAll("'", '"');
+		uuid = uuid.replaceAll("'", '"');
+		pass = pass.replaceAll("'", '"');
+		key = key.replaceAll('"', "'");
+		newValue = newValue.replaceAll("'", '"');
 
 		// Check user authorization
 		if (!authChat(cuid, uuid, pass)) res.status(403).send("");
@@ -93,9 +93,9 @@ router.put("/db/write/send-message", async (req, res) => {
 
 	const client = await pool.connect();
 	try {
-		cuid = cuid.replace("'", '"');
-		uuid = uuid.replace("'", '"');
-		password = password.replace("'", '"');
+		cuid = cuid.replaceAll("'", '"');
+		uuid = uuid.replaceAll("'", '"');
+		password = password.replaceAll("'", '"');
 		msg.content = decodeAscii(msg.content);
 
 		// Check user authorization

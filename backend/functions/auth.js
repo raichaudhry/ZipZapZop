@@ -13,8 +13,8 @@ const auth = async (id, pass, username = false) => {
 	if (username) console.warn("The `username` parameter is deprecated. Always use the UID.");
 
 	// Prevent SQL injection
-	id = id.replace("'", '"');
-	pass = decodeURI(pass).replace("'", '"');
+	id = id.replaceAll("'", '"');
+	pass = decodeURI(pass).replaceAll("'", '"');
 
 	const client = await pool.connect();
 	try {
