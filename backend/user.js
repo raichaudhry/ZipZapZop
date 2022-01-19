@@ -17,9 +17,9 @@ router.get("/db/users/:id/:pass/:key", async (req, res) => {
 	if (username) id = id.replace("username-", "");
 
 	// Prevent SQL injection.
-	id = id.replace("'", '"');
-	pass = pass.replace("'", '"');
-	key = key.replace('"', "'");
+	id = id.replaceAll("'", '"');
+	pass = pass.replaceAll("'", '"');
+	key = key.replaceAll('"', "'");
 
 	const client = await pool.connect();
 	try {
@@ -51,10 +51,10 @@ router.put("/db/write/users/:id/:pass/:key/:newValue", async (req, res) => {
 	if (username) id = id.replace("username-", "");
 
 	// Prevent SQL injection.
-	id = id.replace("'", '"');
-	pass = pass.replace("'", '"');
-	key = key.replace('"', "'");
-	newValue = newValue.replace("'", '"');
+	id = id.replaceAll("'", '"');
+	pass = pass.replaceAll("'", '"');
+	key = key.replaceAll('"', "'");
+	newValue = newValue.replaceAll("'", '"');
 
 	const client = await pool.connect();
 	try {

@@ -9,9 +9,9 @@ const authChat = async (cuid, uuid, pass) => {
 		if (!(await auth(uuid, pass))) return false;
 
 		// Prevent SQL injection
-		cuid = cuid.replace("'", '"');
-		uuid = uuid.replace("'", '"');
-		pass = pass.replace("'", '"');
+		cuid = cuid.replaceAll("'", '"');
+		uuid = uuid.replaceAll("'", '"');
+		pass = pass.replaceAll("'", '"');
 
 		// Make sure chat exists
 		const query = await client.query(`SELECT people FROM chats WHERE uid='${cuid}'`);

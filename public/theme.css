@@ -1,4 +1,4 @@
-@import "https://fonts.googleapis.com/css?family=Comfortaa";
+@import "https://fonts.googleapis.com/css?family=Comfortaa&effect=shadow-multiple";
 /* Define a site-wide theme here - colors, fonts, defaults, ect. */
 html {
 	/* Site-wide variables */
@@ -15,13 +15,11 @@ html {
 
 	--h1-font: "Comfortaa";
 
-	--background-root: white;
-}
-html.light {
-	/* Site-wide variables for light theme */
-}
-html.dark {
-	/* Site-wide variables for dark theme */
+	--background-root: #fefefe; /* Off-White */
+	--background-nav: #fdfdfd; /* Off-Off-White */
+	--background-default: #f0f0f0; /* Light Grey */
+	--background-higher: #ddd; /* Grey */
+	--background-highest: #d0d0d0; /* Darker Grey */
 }
 
 html,
@@ -32,6 +30,7 @@ html {
 	overflow: scroll;
 	padding: 0;
 	height: 100%;
+	background-color: var(--background-root);
 }
 body {
 	overflow: auto;
@@ -49,4 +48,8 @@ h1 {
 
 footer {
 	margin-top: var(--padding-default);
+}
+
+.error {
+	color: red;
 }
