@@ -44,3 +44,11 @@ body {
 h1 {
 	font-family: var(--h1-font);
 }
+
+footer {
+	margin-top: var(--padding-default);
+}
+
+.error {
+	color: red;
+}
