@@ -28,10 +28,9 @@ router.get("/db/users/:id/:pass/:key", async (req, res) => {
 		const output = query.rows[0];
 
 		if (query.rowCount == 1) res.send(output);
-		else throw new Error(`\`query.rowCount\` != 1\n\`query.rowCount\`: '${query.rowCount}'\n\`query.rows\`: ${query.rows ?? []}`);
+		else throw new Error(`\`query.rowCount\` != 1\n\`query.rowCount\`: '${query.rowCount}'\n\`query.rows\`: [${query.rows ?? []}]`);
 	} catch (err) {
 		console.error(err);
-		console.log(id);
 		res.status(500).send("{}");
 		// ALWAYS check out client.
 	} finally {
@@ -61,6 +60,30 @@ router.put("/db/write/users/:id/:pass/:key/:newValue", async (req, res) => {
 	try {
 		// Add quotes to prevent SQL injection.
 		await client.query(`UPDATE users SET "${key}" = '${newValue}' WHERE ${username ? "username" : "uid"}='${id}' AND password='${pass}';`);
+		res.sendStatus(204);
+	} catch (err) {
+		res.status(500).send(`${err}`);
+		console.error(err);
+	} finally {
+		// ALWAYS check out client.
+		client.release();
+	}
+});
+
+// Create an account
+router.post("/db/write/create-account", async (req, res) => {
+	let { username, password } = req.headers;
+
+	// Verify that the username matches the criteria
+	if (!/\w+/.test(username) && username.indexOf("username-") === 0 && username.length <= 42) return res.sendStatus(422);
+
+	// Remove single quotes from both
+	// Don't need to do it for the username b/c it already is only alphanumeric.
+	password = password.replaceAll("'", '"');
+
+	const client = await pool.connect();
+	try {
+		await client.query(`INSERT INTO users(username, password) VALUES ('${username}', '${password}')`);
 		res.sendStatus(204);
 	} catch (err) {
 		res.status(500).send(`${err}`);

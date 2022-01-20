@@ -1,5 +1,6 @@
 import { encrypt } from "../encryptor.js";
-const chat = async (cuid, id, password, key, newValue, username = false) => {
+const chat = async (cuid, id, password, key, username = false, username_ = false) => {
+	username = username || username_;
 	password = encrypt(password);
 	if (newValue) {
 		const res = await fetch(`/db/write/chats/${cuid}/${username ? "username-" : ""}${id}/${password}/${key}/${newValue}`);

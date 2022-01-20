@@ -1,6 +1,7 @@
 import Cookie from "../../modules/Cookie.js";
 import Message from "../Message/main.js";
 import user from "../../modules/db/user.js";
+import { encodeAscii } from "../../modules/ascii.js";
 
 class AuthError extends Error {
 	constructor(msg) {
@@ -15,9 +16,10 @@ if (!document.getElementById("x-chat-view-template")) {
 	template.id = "x-chat-view-template";
 	template.innerHTML = `
 	<link rel="stylesheet" href="${PATH}/style.css">
-	<slot><!-- Messages --></slot>
+	<slot name="messages"></slot>
+	<slot name="form"></slot>
 
-	<form id="msg-form" action="javascript:void(0)" autocomplete="off">
+	<form id="msg-form" action="javascript:void(0)" autocomplete="off" slot="form">
 		<input type="text" placeholder="Message" id="msg-input">
 		<input type="submit" value="Send!">
 	</form>`;
@@ -25,6 +27,17 @@ if (!document.getElementById("x-chat-view-template")) {
 }
 
 class ChatView extends HTMLElement {
+	/**
+	 * @typedef {Object} message
+	 * @property {String} muid The UUID of the message.
+	 * @property {String} author The UUID of the user who sent the message
+	 * @property {String} content The content of the message
+	 * @property {Number} timeSent The time the message was sent, taken from `Date.now()`
+	 * @property {Number} serverTime The time the message was sent, taken from the server.
+	 * @property {String} original The original message
+	 * @property {Boolean} deleted Was the message deleted?
+	 */
+
 	/**
 	 * @param {String} cuid The UID of the chat.
 	 * @param {HTMLHeadingElement} title An `<h1>` that will serve
@@ -54,6 +67,7 @@ class ChatView extends HTMLElement {
 			try {
 				// Get new message content
 				const msg = msgInput.value;
+				msgInput.value = "";
 
 				// Get date from server
 				const date = await (async () => {
@@ -61,15 +75,6 @@ class ChatView extends HTMLElement {
 					return Number(res.text());
 				})();
 
-				const encodeAscii = unicode => {
-					let ascii = "";
-					for (const char of unicode) {
-						ascii += " ";
-						ascii += char.codePointAt(0);
-					}
-					ascii = ascii.substring(1);
-					return ascii;
-				};
 				// Push to server
 				const res = await fetch(`/db/write/send-message`, {
 					method: "PUT",
@@ -79,7 +84,7 @@ class ChatView extends HTMLElement {
 						password,
 						/** @type {message} */
 						msg: JSON.stringify({
-							sender: uuid,
+							author: uuid,
 							content: encodeAscii(msg),
 							timeSent: Date.now(),
 							serverTime: date,
@@ -100,8 +105,6 @@ class ChatView extends HTMLElement {
 		this.appendChild(msgForm);
 	}
 	async loadMessages() {
-		this.shadowRoot.host.querySelectorAll("chat-message").forEach(elem => elem.remove());
-
 		const uuid = Cookie.get("uuid").value,
 			password = Cookie.get("password").value;
 		const res = await fetch(`/db/chats/${this.cuid}/${uuid}/${password}/messages`);
@@ -116,21 +119,15 @@ class ChatView extends HTMLElement {
 		document.getElementById("title").textContent = this.title;
 
 		// Add messages
-		/**
-		 * @typedef {Object} message
-		 * @property {String} sender The uuid of the user who sent the message
-		 * @property {String} content The content of the message
-		 * @property {Number} timeSent The time the message was sent, taken from `Date.now()`
-		 * @property {Number} serverTime The time the message was sent, taken from the server.
-		 * @property {String} original The original message
-		 * @property {Boolean} deleted Was the message deleted?
-		 */
-
 		/** @type {message[]} */
-		const messages = (await res.json()).messages || [];
+		const messages = (await res.json()).messages ?? [];
+
+		// Clear all previous messages
+		this.shadowRoot.host.querySelectorAll("chat-message").forEach(elem => elem.remove());
 
 		for (const message of messages) {
 			const elem = new Message(message);
+			elem.slot = "messages";
 			this.appendChild(elem);
 		}
 

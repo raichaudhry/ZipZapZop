@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Sign Up — Zip Zap Zop</title>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<h1>Sign Up</h1>
+		<form action="javascript:void(0)" id="form">
+			<label for="username">Username:</label>
+			<input type="text" autocomplete="off" name="username" id="username" />
+			<br />
+			<label for="password">Password:</label>
+			<input type="password" autocomplete="new-password" name="password" id="password" oncopy="return false" />
+			<br />
+			<label for="password">Verify Password:</label>
+			<input type="password" autocomplete="new-password" name="verify-password" id="verify-password" oncopy="return false" />
+			<br />
+			<input type="submit" value="Sign up!" />
+		</form>
+		<div id="error" class="error"></div>
+		<footer>Already have an account? <a href="/login">Login!</a></footer>
+		<script src="script.js" type="module"></script>
+	</body>
+</html>
