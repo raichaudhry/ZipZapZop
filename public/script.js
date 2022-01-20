@@ -15,6 +15,7 @@ try {
 	};
 
 	const main = async () => {
+		// Set up chats
 		const username = cookies.username.value;
 		const password = cookies.password.value;
 
@@ -42,6 +43,9 @@ try {
 
 			document.getElementById("chat-list").appendChild(chatListElem);
 		}
+
+		// Handle creating new chats
+		document.getElementById("compose")?.addEventListener("click", e => {});
 	};
 
 	(async () => {
