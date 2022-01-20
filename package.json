@@ -30,7 +30,8 @@
 	"scripts": {
 		"start": "npm run wait-port-psql && node backend/app.js",
 		"dev": "npm run wait-port-psql && nodemon backend/app.js",
-		"wait-port-psql": "wait-port psql:5432"
+		"wait-port-psql": "wait-port psql:5432",
+		"test": "echo 'No tests.'"
 	},
 	"nodemonConfig": {
 		"ignore": [
