@@ -9,7 +9,7 @@ form.addEventListener("submit", async _ => {
 		verifyPassword = document.getElementById("verify-password")?.value;
 
 	if (username && password && verifyPassword) {
-		if (!/\w+/.test(username)) return error("The username must be alphanumeric."); // Ensure that the username is alphanumeric.
+		if (!/^\w+$/.test(username)) return error("The username must be alphanumeric."); // Ensure that the username is alphanumeric.
 
 		if (password !== verifyPassword) return error("The passwords do not match."); // Ensure that the user typed the password correctly
 
