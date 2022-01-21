@@ -26,8 +26,9 @@ form.addEventListener("submit", async _ => {
 
 		// Check to see if the account was actually created.
 		if (res.status == 204) {
+			// Set cookies. If sucessful, then redirect to the homepage.
 			if (login()) {
-				location.replace("/"); // Set cookies. If sucessful, then redirect to the homepage.
+				location.replace("/");
 			} else error("There was a problem signing you in. Go to the <a href='/login'>login page</a> to log in. ");
 		} else {
 			error(`There was a problem creating your account. <br/>Error ${res.status}`);
