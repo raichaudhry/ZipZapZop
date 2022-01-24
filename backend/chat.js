@@ -119,4 +119,60 @@ router.put("/db/write/send-message", async (req, res) => {
 	}
 });
 
+router.post("/db/write/create-chat", async (req, res) => {
+	/**
+	 * The name of the chat.
+	 * @type {String}
+	 */
+	const name = req.get("name") || people_.join(", ").replace("'", '"'),
+		/**
+		 * An array of usernames.
+		 * @type {String[]}
+		 */
+		people_ = JSON.parse(req.get("people"));
+
+	if (people_.length <= 0) return res.sendStatus(422);
+
+	const client = await pool.connect();
+	try {
+		// Get user UUIDs
+		/**
+		 * An array of UUIDs
+		 * @type {String[]} */
+		const people = [];
+		for (const username of people_) {
+			const query = await client.query(`SELECT uid FROM users WHERE username='${username.replaceAll("'", '"')}'`);
+
+			if (query.rowCount != 1) throw new Error(`UUID not found for user '${username}'`);
+
+			people.push(query.rows[0]?.uid);
+		}
+
+		if (people.length <= 0) return res.sendStatus(422);
+
+		// Add chat to chats table
+		const cuid = genUuid();
+		await client.query(`INSERT INTO chats(uid, name, people) VALUES ('${cuid}'::UUID, '${name}', ARRAY['${people.join("', '")}']::UUID[])`);
+
+		// Add chat to everyone's chats column
+		for (const uuid of people) {
+			// Ensure that the whole program doesn't crash if one user fails
+			try {
+				await client.query(`UPDATE users SET chats = chats || '${cuid}'::UUID WHERE uid='${uuid}'`);
+			} catch (e) {
+				console.error(`User '${uuid}' couldn't be added to chat '${cuid}'.`);
+				console.error(e);
+			}
+		}
+
+		res.sendStatus(204);
+	} catch (e) {
+		console.error(e);
+		res.sendStatus(500);
+	} finally {
+		// ALWAYS release client
+		client.release();
+	}
+});
+
 module.exports = router;
