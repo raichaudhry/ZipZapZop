@@ -8,17 +8,17 @@
 	"main": "backend/app.js",
 	"private": true,
 	"dependencies": {
-		"express": "^4.17.2",
-		"pg": "^8.7.1",
-		"wait-port": "^0.2.9",
-		"uuid": "^8.3.2"
+		"express": "^4.x.x",
+		"pg": "^8.x.x",
+		"wait-port": "^0.2.x",
+		"uuid": "^8.x.x"
 	},
 	"devDependencies": {
-		"nodemon": "^2.0.15"
+		"nodemon": "^2.x.x"
 	},
 	"engines": {
-		"node": "^17.3.0",
-		"npm": "^8.3.0"
+		"node": "^17.x.x",
+		"npm": "^8.x.x"
 	},
 	"browserslist": [
 		"> 1%",
