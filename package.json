@@ -36,6 +36,7 @@
 	"nodemonConfig": {
 		"ignore": [
 			"public/*"
-		]
+		],
+		"ext": "*"
 	}
 }
