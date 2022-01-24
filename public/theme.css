@@ -1,4 +1,5 @@
-@import "https://fonts.googleapis.com/css?family=Comfortaa|Material+Icons|Material+Icons+Round&effect=shadow-multiple";
+@import "/material-icons.css";
+
 /* Define a site-wide theme here - colors, fonts, defaults, ect. */
 html {
 	/* Site-wide variables */
