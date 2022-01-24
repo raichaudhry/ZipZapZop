@@ -4,6 +4,7 @@ import auth from "./modules/db/auth.js";
 import { encrypt, decrypt } from "./modules/encryptor.js";
 import user from "./modules/db/user.js";
 import ChatView from "./components/ChatView/main.js";
+import CreateChat from "./components/CreateChat/main.js";
 
 try {
 	const cookies = {};
