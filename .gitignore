@@ -3,3 +3,4 @@ postgresql.log
 Database/*
 .vscode/*
 node_modules
+package-lock.json
