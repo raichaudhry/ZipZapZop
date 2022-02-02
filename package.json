@@ -14,7 +14,8 @@
 		"uuid": "^8.x.x"
 	},
 	"devDependencies": {
-		"nodemon": "^2.x.x"
+		"nodemon": "^2.x.x",
+		"prettier": "^2.x.x"
 	},
 	"engines": {
 		"node": "^17.x.x",
@@ -38,5 +39,12 @@
 			"public/*"
 		],
 		"ext": "*"
+	},
+	"prettier": {
+		"useTabs": true,
+		"tabWidth": 4,
+		"quoteProps": "consistent",
+		"trailingComma": "es5",
+		"arrowParens": "avoid"
 	}
 }
