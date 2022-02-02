@@ -5,6 +5,7 @@ import { encrypt, decrypt } from "./modules/encryptor.js";
 import user from "./modules/db/user.js";
 import ChatView from "./components/ChatView/main.js";
 import CreateChat from "./components/CreateChat/main.js";
+import Modal from "./components/Modal/main.js";
 
 try {
 	const cookies = {};
@@ -21,17 +22,27 @@ try {
 		const password = cookies.password.value;
 
 		// Get the uuid cookie, or set it.
-		cookies.uuid = Cookie.get("uuid") ?? Cookie.set({ name: "uuid", value: await user(username, password, "uid", undefined, true) })[0];
+		cookies.uuid =
+			Cookie.get("uuid") ??
+			Cookie.set({
+				name: "uuid",
+				value: await user(username, password, "uid", undefined, true),
+			})[0];
 
 		const uuid = cookies.uuid.value;
-		const chats = (await user(username, password, "chats", undefined, true)) ?? [];
+		const chats =
+			(await user(username, password, "chats", undefined, true)) ?? [];
 
 		for (const cuid of chats) {
 			const req = await fetch(`/db/chats/${cuid}/${uuid}/${password}/`);
 			if (req.status < 200 || req.status >= 300) continue;
 
 			const data = await req.json();
-			const chatListElem = new components.ChatListElement(data.name, data.uid, "/assets/chatIcon.svg");
+			const chatListElem = new components.ChatListElement(
+				data.name,
+				data.uid,
+				"/assets/chatIcon.svg"
+			);
 
 			chatListElem.addEventListener(
 				"open-chat",
@@ -50,10 +61,12 @@ try {
 	};
 
 	(async () => {
-		if (cookies.username == undefined || cookies.password == undefined) login();
+		if (cookies.username == undefined || cookies.password == undefined)
+			login();
 
 		// Auth
-		if (!(await auth(cookies.username.value, cookies.password.value, true))) login();
+		if (!(await auth(cookies.username.value, cookies.password.value, true)))
+			login();
 		else main();
 	})();
 } catch (e) {
