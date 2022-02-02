@@ -98,6 +98,13 @@ class Modal extends HTMLElement {
 		}
 	}
 	connectedCallback() {
+		// Import material icons outside of shadow dom (chrome bug)
+		const link = document.createElement("link");
+		link.rel = "stylesheet";
+		link.href =
+			"https://fonts.googleapis.com/icon?family=Material+Icons+Round";
+		document.head.appendChild(link);
+
 		// Resize font
 		const style = document.createElement("style");
 		style.innerHTML = `#close {
