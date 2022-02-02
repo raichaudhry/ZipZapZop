@@ -1,0 +1,23 @@
+@import "/material-icons.css";
+
+:host #nav {
+	display: none;
+}
+:host([data-open]) #nav {
+	display: block;
+}
+
+:host {
+	position: absolute;
+	top: 1em;
+	left: 1em;
+}
+:host([data-open]) {
+	top: 0;
+	left: 0;
+	bottom: 0;
+
+	z-index: 2147483646;
+	box-shadow: 0 0 1rem -0.5rem;
+	border-radius: 0 1em 1em 0;
+}
