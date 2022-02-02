@@ -35,6 +35,13 @@ class CreateChat extends HTMLElement {
 	#people = [];
 	#name = "";
 
+	static submitted = worked =>
+		new CustomEvent("zopCreateChatSubmit", {
+			detail: { worked },
+			composed: true,
+			bubbles: false,
+		});
+
 	constructor(to, msg) {
 		super();
 
@@ -57,24 +64,35 @@ class CreateChat extends HTMLElement {
 		root.getElementById("add")?.addEventListener("click", async _ => {
 			const people = root.getElementById("people");
 			if (people.hasAttribute("x-no-people")) people.innerHTML = "";
-			people.innerHTML += `${people.hasAttribute("x-no-people") ? "" : ", "}${root.getElementById("add-value").value}`;
+			people.innerHTML += `${
+				people.hasAttribute("x-no-people") ? "" : ", "
+			}${root.getElementById("add-value").value}`;
 			people.removeAttribute("x-no-people");
 		});
 		root.getElementById("form")?.addEventListener("submit", async _ => {
 			const name = root.getElementById("name")?.value,
 				people = root.getElementById("people")?.textContent.split(", ");
 
-			if (root.getElementById("people").hasAttribute("x-no-people")) return error("You must add people to create a chat.");
+			if (root.getElementById("people").hasAttribute("x-no-people"))
+				return error("You must add people to create a chat.");
 
-			if (await this.create(name, people)) alert("Chat created!");
-			else alert("Chat not created :(");
+			this.dispatchEvent(
+				CreateChat.submitted(await this.create(name, people))
+			);
 		});
 	}
-	async create(name = this.#name, people = this.#people, returnStatus = false) {
+	async create(
+		name = this.#name,
+		people = this.#people,
+		returnStatus = false
+	) {
 		// Add current user to people
 		const username = Cookie.get("username")?.value;
 		if (username) people.push(username);
-		else throw new Error(`Username not found. \nCookie value: '${username}'`);
+		else
+			throw new Error(
+				`Username not found. \nCookie value: '${username}'`
+			);
 
 		const res = await fetch("/db/write/create-chat", {
 				method: "POST",
