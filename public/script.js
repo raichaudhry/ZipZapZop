@@ -57,7 +57,20 @@ try {
 		}
 
 		// Handle creating new chats
-		document.getElementById("compose")?.addEventListener("click", e => {});
+		document.getElementById("compose")?.addEventListener("click", e => {
+			const elem = new CreateChat();
+			const modal = new Modal("Compose", elem);
+			document.body.appendChild(modal);
+			modal.open();
+
+			elem.addEventListener(
+				"zopCreateChatSubmit",
+				({ detail: { worked } }) => {
+					if (worked) modal.close();
+					else alert("Something went wrong");
+				}
+			);
+		});
 	};
 
 	(async () => {
