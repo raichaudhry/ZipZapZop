@@ -1,0 +1,48 @@
+@import "/material-icons.css";
+
+:host {
+	display: none;
+}
+:host([data-open]) {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	background-color: rgba(0, 0, 0, 0.8);
+	z-index: 2147483647;
+}
+
+#modal {
+	background-color: white;
+	overflow: scroll;
+	position: relative;
+
+	border-radius: 1em;
+	padding: 1em;
+
+	min-width: 75vw;
+	min-height: 75vh;
+
+	/* TODO: Add animations */
+}
+
+::slotted([slot="title"]) {
+	margin: 0;
+}
+
+#close {
+	position: absolute;
+	top: calc(1 / 1.5 * 1em);
+	right: calc(1 / 1.5 * 1em);
+	padding: 0;
+
+	background-color: rgba(255, 255, 255, 0.5);
+	border-radius: 1em;
+	border: none;
+}
