@@ -106,7 +106,9 @@ class Modal extends HTMLElement {
 		this.appendChild(style);
 
 		// Add event listeners
-		this.shadowRoot.getElementById("close").addEventListener("click", _ => this.close());
+		this.shadowRoot
+			.getElementById("close")
+			.addEventListener("click", _ => this.close());
 	}
 	open() {
 		this.shadowRoot.host.setAttribute("data-open", "");
