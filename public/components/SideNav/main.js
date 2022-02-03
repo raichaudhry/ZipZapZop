@@ -91,11 +91,17 @@ class SideNav extends HTMLElement {
 		document.head.appendChild(link);
 	}
 	open() {
+		const menu = this.shadowRoot.getElementById("menu");
+		menu.innerHTML = "close";
+
 		this.setAttribute("data-open", "");
 		this.dispatchEvent(this.event.open);
 		this.dispatchEvent(this.event.change);
 	}
 	close() {
+		const menu = this.shadowRoot.getElementById("menu");
+		menu.innerHTML = "menu";
+
 		this.removeAttribute("data-open");
 		this.dispatchEvent(this.event.close);
 		this.dispatchEvent(this.event.change);
