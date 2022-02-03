@@ -1,5 +1,5 @@
-import ButtonIcon from "../components/ButtonIcon/main.js";
+import SideNav from "../components/SideNav/main.js";
 import TopNav from "../components/TopNav/main.js";
 import ChatListElement from "../components/ChatListElement/main.js";
 import ChatView from "../components/ChatView/main.js";
-export default { ButtonIcon, TopNav, ChatListElement, ChatView };
+export default { TopNav, SideNav, ChatListElement, ChatView };
