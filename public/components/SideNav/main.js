@@ -81,6 +81,13 @@ class SideNav extends HTMLElement {
 			elem.appendChild(item);
 			list.appendChild(elem);
 		}
+
+		// Add event listeners
+		const menu = this.shadowRoot.getElementById("menu");
+		menu.addEventListener("click", _ => {
+			if (this.isOpen) this.close();
+			else this.open();
+		});
 	}
 	connectedCallback() {
 		// Import material icons outside of shadow dom (chrome bug)
