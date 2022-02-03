@@ -74,6 +74,10 @@ class SideNav extends HTMLElement {
 				.content.cloneNode(true)
 		);
 
+		// Handle slot
+		items.push(...this.childNodes);
+
+		// Add items to nav
 		const list = this.shadowRoot.getElementById("list");
 		this.items = items;
 		for (const item of this.items) {
