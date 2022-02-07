@@ -6,7 +6,7 @@ const pool = new Pool(options);
  * @param {String} username The username of the user.
  * @returns {String?} A UUID string. Returns `null` if the UUID is not found.
  */
-const getUuid = username => {
+const getUuid = async username => {
 	const client = await pool.connect();
 	try {
 		// Prevent SQL injection
