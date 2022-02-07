@@ -92,6 +92,10 @@ class SideNav extends HTMLElement {
 			if (this.isOpen) this.close();
 			else this.open();
 		});
+
+		// BUG: it starts too far to the left before it is first opened.
+		// BUG: the drop shadow is still there.
+		this.close();
 	}
 	connectedCallback() {
 		// Import material icons outside of shadow dom (chrome bug)
@@ -104,6 +108,23 @@ class SideNav extends HTMLElement {
 	open() {
 		const menu = this.shadowRoot.getElementById("menu");
 		menu.innerHTML = "close";
+		{
+			// Set nav styles
+			const nav = this.shadowRoot.getElementById("nav");
+			nav.style.left = "0";
+
+			const paddingTop =
+				menu.getBoundingClientRect().bottom +
+				this.getBoundingClientRect().top;
+
+			nav.style.paddingTop = `${paddingTop}px`;
+			nav.style.paddingLeft = menu.getBoundingClientRect().left + "px";
+			nav.style.height = `${
+				document.documentElement.clientHeight -
+				paddingTop -
+				getComputedStyle(nav).paddingBottom.split("px")[0]
+			}px`;
+		}
 
 		this.setAttribute("data-open", "");
 		this.dispatchEvent(this.event.open);
@@ -116,6 +137,10 @@ class SideNav extends HTMLElement {
 		this.removeAttribute("data-open");
 		this.dispatchEvent(this.event.close);
 		this.dispatchEvent(this.event.change);
+
+		// Set nav styles
+		const nav = this.shadowRoot.getElementById("nav");
+		nav.style.left = `-${nav.getBoundingClientRect().width}px`;
 	}
 }
 customElements.define("side-nav", SideNav);

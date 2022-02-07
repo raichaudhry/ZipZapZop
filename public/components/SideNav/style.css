@@ -1,32 +1,49 @@
+/* TODO: Make #nav work more on it's own, not in :host 
+ * (then the button can be placed anywhere 
+ * and the nav will always come in from the left.) 
+ */
+
 @import "/theme.css";
 
 #nav {
-	display: none;
+	/* display: none; */
+
+	position: fixed;
+	top: 0;
+	left: -100vw;
+	bottom: 0;
+
+	height: 100%;
+	overflow: scroll;
+
+	padding: 1em;
+
+	background-color: var(--background-nav);
+
+	z-index: -1;
+
+	border-radius: 0 1em 1em 0;
+
+	transition: left ease-out 0.5s;
+
+	box-shadow: 0 0 1rem -0.5rem;
 }
 :host([data-open]) #nav {
-	display: initial;
+	/* display: initial; */
+	left: 0;
 }
 
 :host {
-	position: absolute;
-	top: 0;
-	left: 0;
+	position: relative;
+	/* position: absolute;
+	top: 1rem;
+	left: 1rem; */
 	z-index: 2147483646;
-}
-:host([data-open]) {
-	min-height: 100%;
-	padding-bottom: 1rem;
-	box-shadow: 0 0 1rem -0.5rem;
-	background-color: var(--background-nav);
-}
-
-#menu {
-	margin: 1rem;
 }
 
 #list {
 	padding: 0;
-	margin: 0 1rem;
+	margin: 0 0;
 	list-style: none;
 }
 
