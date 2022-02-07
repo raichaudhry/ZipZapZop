@@ -10,14 +10,14 @@ router.use(express.text());
 
 // Get a value
 router.get("/db/user/", async (req, res) => {
-	let { username, uid, pass, key = "*" } = req.headers;
+	let { username, uid, password, key = "*" } = req.headers;
 
-	if (!((username || uid) && pass && key)) res.sendStatus(400);
+	if (!((username || uid) && password && key)) res.sendStatus(400);
 
 	// Prevent SQL injection.
 	username = username?.replaceAll("'", '"');
 	uid = uid?.replaceAll("'", '"');
-	pass = pass.replaceAll("'", '"');
+	password = password.replaceAll("'", '"');
 	key = key.replaceAll('"', "'");
 
 	if (key != "*") key = `"${key}"`;
@@ -28,7 +28,7 @@ router.get("/db/user/", async (req, res) => {
 		const query = await client.query(
 			`SELECT ${key} FROM users WHERE ${
 				!!username ? `username='${username}'` : `uid=${uid}`
-			} AND password='${pass}'`
+			} AND password='${password}'`
 		);
 		const output = query.rows[0];
 
@@ -48,14 +48,15 @@ router.get("/db/user/", async (req, res) => {
 
 // Set a new value
 router.put("/db/write/user/", async (req, res) => {
-	let { username, uid, pass, key, newValue } = req.headers;
+	let { username, uid, password, key, newValue } = req.headers;
 
-	if (!((username || uid) && pass && key && newValue)) res.sendStatus(400);
+	if (!((username || uid) && password && key && newValue))
+		res.sendStatus(400);
 
 	// Prevent SQL injection.
 	username = username?.replaceAll("'", '"');
 	uid = uid?.replaceAll("'", '"');
-	pass = pass.replaceAll("'", '"');
+	password = password.replaceAll("'", '"');
 	key = key.replaceAll('"', "'");
 	newValue = newValue.replaceAll("'", '"');
 
@@ -65,7 +66,7 @@ router.put("/db/write/user/", async (req, res) => {
 		await client.query(
 			`UPDATE users SET ${key} = '${newValue}' WHERE ${
 				!!username ? `username='${username}'` : `uid=${uid}`
-			} AND password='${pass}';`
+			} AND password='${password}';`
 		);
 		res.sendStatus(204);
 	} catch (err) {
