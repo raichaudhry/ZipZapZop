@@ -10,8 +10,6 @@ const pool = new Pool(options);
  */
 /** @param username Deprecated!!! Use only UIDs instead. */
 const auth = async (id, pass, username = false) => {
-	if (username) console.warn("The `username` parameter is deprecated. Always use the UID.");
-
 	// Prevent SQL injection
 	id = id.replaceAll("'", '"');
 	pass = decodeURI(pass).replaceAll("'", '"');
