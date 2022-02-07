@@ -7,7 +7,7 @@ const user = async (
 	username_ = false
 ) => {
 	username = username || username_;
-	pasword = encodeURI(password);
+	password = encodeURI(password);
 	try {
 		const res = await fetch(`/db/user/`, {
 			headers: username
