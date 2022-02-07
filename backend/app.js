@@ -1,17 +1,15 @@
-const user = require("./user");
 const express = require("express");
-const chat = require("./chat");
-const auth = require("./auth");
 const app = express();
 const port = 8080;
+
+// Load middleware
+["user", "chat", "auth", "message"].forEach(routerName =>
+	express.use(require(`./${routerName}`))
+);
 
 app.listen(port, () => console.log(`Zip Zap Zop starting on port ${port}.`));
 
 app.use(express.static("/ZipZapZop/public"));
-
-app.use(user);
-app.use(chat);
-app.use(auth);
 
 // Get date from server
 app.get("/date", (_req, res) => res.send(`${Date.now()}`));
