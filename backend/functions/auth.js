@@ -18,7 +18,11 @@ const auth = async (id, pass, username = false) => {
 
 	const client = await pool.connect();
 	try {
-		const query = await client.query(`SELECT uid FROM users WHERE ${username ? "username" : "uid"}='${id}' AND password='${pass}'`);
+		const query = await client.query(
+			`SELECT uid FROM users WHERE ${
+				username ? "username" : "uid"
+			}='${id}' AND password='${pass}'`
+		);
 		const output = query.rows[0];
 		if (output == undefined) return false;
 		return true;
