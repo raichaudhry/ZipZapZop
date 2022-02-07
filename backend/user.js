@@ -91,7 +91,7 @@ router.post("/db/write/create-account", async (req, res) => {
 		return res.sendStatus(422);
 
 	// Remove single quotes from both
-	// Don't need to do it for the username b/c it already is only alphanumeric.
+	// Don't need to do it for the username bc it already is only alphanumeric.
 	password = password.replaceAll("'", '"');
 
 	const client = await pool.connect();
