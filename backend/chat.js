@@ -1,5 +1,4 @@
 const authChat = require("./functions/authChat");
-const { decodeAscii } = require("./functions/ascii");
 const { v4: genUuid } = require("uuid");
 
 const { Pool, options } = require("./poolOptions");
