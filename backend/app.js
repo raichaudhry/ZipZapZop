@@ -4,7 +4,7 @@ const port = 8080;
 
 // Load middleware
 ["user", "chat", "auth", "message"].forEach(routerName =>
-	express.use(require(`./${routerName}`))
+	app.use(require(`./${routerName}`))
 );
 
 app.listen(port, () => console.log(`Zip Zap Zop starting on port ${port}.`));
