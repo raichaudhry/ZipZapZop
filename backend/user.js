@@ -24,7 +24,11 @@ router.get("/db/users/:id/:pass/:key", async (req, res) => {
 	const client = await pool.connect();
 	try {
 		// Add quotes to prevent SQL injection.
-		const query = await client.query(`SELECT ${key === "*" ? "*" : '"' + key + '"'} FROM users WHERE ${username ? "username" : "uid"}='${id}' AND password='${pass}'`);
+		const query = await client.query(
+			`SELECT ${key} FROM users WHERE ${
+				!!username ? `username='${username}'` : `uid=${uid}`
+			} AND password='${pass}'`
+		);
 		const output = query.rows[0];
 
 		if (query.rowCount == 1) res.send(output);
@@ -32,8 +36,8 @@ router.get("/db/users/:id/:pass/:key", async (req, res) => {
 	} catch (err) {
 		console.error(err);
 		res.status(500).send("{}");
-		// ALWAYS check out client.
 	} finally {
+		// ALWAYS check out client.
 		client.release();
 	}
 });
@@ -59,7 +63,11 @@ router.put("/db/write/users/:id/:pass/:key/:newValue", async (req, res) => {
 	const client = await pool.connect();
 	try {
 		// Add quotes to prevent SQL injection.
-		await client.query(`UPDATE users SET "${key}" = '${newValue}' WHERE ${username ? "username" : "uid"}='${id}' AND password='${pass}';`);
+		await client.query(
+			`UPDATE users SET ${key} = '${newValue}' WHERE ${
+				!!username ? `username='${username}'` : `uid=${uid}`
+			} AND password='${pass}';`
+		);
 		res.sendStatus(204);
 	} catch (err) {
 		res.status(500).send(`${err}`);
@@ -75,7 +83,12 @@ router.post("/db/write/create-account", async (req, res) => {
 	let { username, password } = req.headers;
 
 	// Verify that the username matches the criteria
-	if (!/\w+/.test(username) && username.indexOf("username-") === 0 && username.length <= 42) return res.sendStatus(422);
+	if (
+		!/\w+/.test(username) &&
+		username.indexOf("username-") === 0 &&
+		username.length <= 42
+	)
+		return res.sendStatus(422);
 
 	// Remove single quotes from both
 	// Don't need to do it for the username b/c it already is only alphanumeric.
@@ -83,7 +96,9 @@ router.post("/db/write/create-account", async (req, res) => {
 
 	const client = await pool.connect();
 	try {
-		await client.query(`INSERT INTO users(username, password) VALUES ('${username}', '${password}')`);
+		await client.query(
+			`INSERT INTO users(username, password) VALUES ('${username}', '${password}')`
+		);
 		res.sendStatus(204);
 	} catch (err) {
 		res.status(500).send(`${err}`);
