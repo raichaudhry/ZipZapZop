@@ -1,5 +1,3 @@
-const { Pool, options } = require("./poolOptions");
-const pool = new Pool(options);
 const user = require("./user");
 const express = require("express");
 const chat = require("./chat");
