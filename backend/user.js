@@ -1,4 +1,3 @@
-const { decrypt } = require("./functions/encryptor");
 const { Pool, options } = require("./poolOptions");
 const pool = new Pool(options);
 
@@ -10,16 +9,18 @@ router.use(express.urlencoded({ extended: true }));
 router.use(express.text());
 
 // Get a value
-router.get("/db/users/:id/:pass/:key", async (req, res) => {
-	let { id, pass, key } = req.params;
+router.get("/db/user/", async (req, res) => {
+	let { username, uid, pass, key = "*" } = req.headers;
 
-	const username = id.indexOf("username-") === 0;
-	if (username) id = id.replace("username-", "");
+	if (!((username || uid) && pass && key)) res.sendStatus(400);
 
 	// Prevent SQL injection.
-	id = id.replaceAll("'", '"');
+	username = username?.replaceAll("'", '"');
+	uid = uid?.replaceAll("'", '"');
 	pass = pass.replaceAll("'", '"');
 	key = key.replaceAll('"', "'");
+
+	if (key != "*") key = `"${key}"`;
 
 	const client = await pool.connect();
 	try {
@@ -32,7 +33,10 @@ router.get("/db/users/:id/:pass/:key", async (req, res) => {
 		const output = query.rows[0];
 
 		if (query.rowCount == 1) res.send(output);
-		else throw new Error(`\`query.rowCount\` != 1\`query.rowCount\`: '${query.rowCount}'\nQuery: '${query}'`);
+		else
+			throw new Error(
+				`\`query.rowCount\` != 1\`query.rowCount\`: '${query.rowCount}'\nQuery: '${query}'`
+			);
 	} catch (err) {
 		console.error(err);
 		res.status(500).send("{}");
@@ -41,21 +45,16 @@ router.get("/db/users/:id/:pass/:key", async (req, res) => {
 		client.release();
 	}
 });
-router.get("/db/users/:id/:pass/", (req, res) => {
-	const { id, pass } = req.params;
-	res.redirect(`/db/users/${id}/${pass}/*`);
-});
 
 // Set a new value
-router.put("/db/write/users/:id/:pass/:key/:newValue", async (req, res) => {
-	let { id, pass, key, newValue } = req.params;
-	key = key;
+router.put("/db/write/user/", async (req, res) => {
+	let { username, uid, pass, key, newValue } = req.headers;
 
-	const username = id.indexOf("username-") === 0;
-	if (username) id = id.replace("username-", "");
+	if (!((username || uid) && pass && key && newValue)) res.sendStatus(400);
 
 	// Prevent SQL injection.
-	id = id.replaceAll("'", '"');
+	username = username?.replaceAll("'", '"');
+	uid = uid?.replaceAll("'", '"');
 	pass = pass.replaceAll("'", '"');
 	key = key.replaceAll('"', "'");
 	newValue = newValue.replaceAll("'", '"');
@@ -70,7 +69,7 @@ router.put("/db/write/users/:id/:pass/:key/:newValue", async (req, res) => {
 		);
 		res.sendStatus(204);
 	} catch (err) {
-		res.status(500).send(`${err}`);
+		res.sendStatus(500);
 		console.error(err);
 	} finally {
 		// ALWAYS check out client.
