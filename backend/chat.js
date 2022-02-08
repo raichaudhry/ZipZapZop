@@ -26,7 +26,6 @@ router.get("/db/chat/", async (req, res) => {
 
 		if (key != "*") key = `"${key}"`;
 
-		console.log(uuid, username);
 		if (!uuid) {
 			if (!(uuid = await getUuid(username))) {
 				res.sendStatus(400);
