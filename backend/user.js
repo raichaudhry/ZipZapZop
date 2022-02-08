@@ -27,7 +27,7 @@ router.get("/db/user/", async (req, res) => {
 		// Add quotes to prevent SQL injection.
 		const query = await client.query(
 			`SELECT ${key} FROM users WHERE ${
-				!!username ? `username='${username}'` : `uid=${uid}`
+				!!username ? `username='${username}'` : `uid='${uid}'`
 			} AND password='${password}'`
 		);
 		const output = query.rows[0];
@@ -65,7 +65,7 @@ router.put("/db/write/user/", async (req, res) => {
 		// Add quotes to prevent SQL injection.
 		await client.query(
 			`UPDATE users SET ${key} = '${newValue}' WHERE ${
-				!!username ? `username='${username}'` : `uid=${uid}`
+				!!username ? `username='${username}'` : `uid='${uid}'`
 			} AND password='${password}';`
 		);
 		res.sendStatus(204);
