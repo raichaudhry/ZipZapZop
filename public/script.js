@@ -31,30 +31,6 @@ try {
 			})[0];
 
 		const uuid = cookies.uuid.value;
-		const chats =
-			(await user(username, password, "chats", undefined, true)) ?? [];
-
-		for (const cuid of chats) {
-			const data = await chat(cuid, username, password, undefined, true);
-			if (!data) continue;
-
-			const chatListElem = new components.ChatListElement(
-				data.name,
-				data.uid,
-				"/assets/chatIcon.svg"
-			);
-
-			chatListElem.addEventListener(
-				"open-chat",
-				/** @param {CustomEvent} e */ async e => {
-					const chatView = new ChatView(e.detail.cuid, e.detail.name);
-					chatView.setAttribute("open", "");
-					document.body.appendChild(chatView);
-				}
-			);
-
-			document.getElementById("chat-list").appendChild(chatListElem);
-		}
 
 		// Handle creating new chats
 		document.getElementById("compose")?.addEventListener("click", _ => {
@@ -73,6 +49,45 @@ try {
 				}
 			);
 		});
+
+		// Poll for new chats
+		let foundChats = [];
+		const pollChats = async () => {
+			const chats = (await user(uuid, password, "chats")) ?? [];
+
+			for (const cuid of chats) {
+				if (foundChats.indexOf(cuid) !== -1) continue;
+				else foundChats.push(cuid);
+
+				const data = await chat(cuid, uuid, password);
+				if (!data) {
+					console.warn(`No data found for chat ${cuid}`);
+					continue;
+				}
+
+				const chatListElem = new components.ChatListElement(
+					data.name,
+					data.uid,
+					data.iconUrl ?? "/assets/chatIcon.svg"
+				);
+
+				chatListElem.addEventListener(
+					"open-chat",
+					/** @param {CustomEvent} e */ async e => {
+						const chatView = new ChatView(
+							e.detail.cuid,
+							e.detail.name
+						);
+						chatView.setAttribute("open", "");
+						document.body.appendChild(chatView);
+					}
+				);
+
+				document.getElementById("chat-list").appendChild(chatListElem);
+			}
+			setTimeout(pollChats, 1000);
+		};
+		pollChats();
 	};
 
 	(async () => {
