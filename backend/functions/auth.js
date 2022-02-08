@@ -8,6 +8,16 @@ const pool = new Pool(options);
  * @returns {Boolean} Returns `true` if the user's credentials are correct, and `false` if they aren't. If the user doesn't exist, it will return `false`.
  */
 const auth = async (id, password, username = false) => {
+	if (!id || !password) {
+		console.warn(
+			"No id or password provided. ID:",
+			id,
+			"Password:",
+			password
+		);
+		return false;
+	}
+
 	// Prevent SQL injection
 	id = id.replaceAll("'", '"');
 	password = decodeURI(password).replaceAll("'", '"');
