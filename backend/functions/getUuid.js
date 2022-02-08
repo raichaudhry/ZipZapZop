@@ -15,11 +15,7 @@ const getUuid = async username => {
 		const query = await client.query(
 			`SELECT uid FROM users WHERE username='${username}'`
 		);
-		if (query.rows.length != 1)
-			return (
-				res.status(422).send(`No uuid found for user '${username}'.`) ??
-				null
-			);
+		if (query.rows.length != 1) return null;
 		return query.rows[0].uid ?? null;
 	} catch (e) {
 		console.error(e);
