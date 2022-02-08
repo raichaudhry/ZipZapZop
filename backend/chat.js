@@ -1,6 +1,6 @@
 const authChat = require("./functions/authChat");
-const { decodeAscii } = require("./functions/ascii");
 const { v4: genUuid } = require("uuid");
+const getUuid = require("./functions/getUuid");
 
 const { Pool, options } = require("./poolOptions");
 const pool = new Pool(options);
@@ -13,101 +13,70 @@ router.use(express.urlencoded({ extended: true }));
 router.use(express.text());
 
 // Get value
-router.get("/db/chats/:cuid/:id/:pass/:key", async (req, res) => {
+router.get("/db/chat/", async (req, res) => {
 	// cuid = chat uid, uuid = user uid
-	let { cuid, id, pass, key } = req.params;
+	let { cuid, username, uuid, password, key = "*" } = req.headers;
 	const client = await pool.connect();
 	try {
-		const username = id.indexOf("username-") === 0;
-		if (username) id = id.replace("username-", "");
-
 		cuid = cuid.replaceAll("'", '"');
-		id = id.replaceAll("'", '"');
-		pass = pass.replaceAll("'", '"');
+		username = username?.replaceAll("'", '"');
+		uuid = uuid?.replaceAll("'", '"');
+		password = password.replaceAll("'", '"');
 		key = key.replaceAll('"', "'");
 
+		if (key != "*") key = `"${key}"`;
+
+		console.log(uuid, username);
+		if (!uuid) {
+			if (!(uuid = await getUuid(username))) {
+				res.sendStatus(400);
+				throw new Error(`UUID not found for username '${usernane}'`);
+			}
+		}
+
 		// Check user authorization
-		if (!authChat(cuid, id, pass)) res.status(403).send("");
+		if (!authChat(cuid, username, password)) res.status(403).send("");
 		else {
-			const query = await client.query(`SELECT ${key === "*" ? "*" : `"${key}"`} FROM chats WHERE ${username ? "username" : "uid"}='${cuid}'`);
+			const query = await client.query(
+				`SELECT ${key} FROM chats WHERE uid='${cuid}'`
+			);
 			res.send(JSON.stringify(query.rows[0]));
 		}
 	} catch (e) {
 		console.error(e);
+		if (res.statusCode >= 200 || res.statusCode < 300) res.sendStatus(500);
 	} finally {
 		// ALWAYS release client.
 		client.release();
 	}
-});
-// Redirect to get everything if there isn't a key.
-router.get("/db/chats/:cuid/:uuid/:pass/", (req, res) => {
-	const { cuid, uuid, pass } = req.params;
-	res.redirect(`/db/chats/${cuid}/${uuid}/${pass}/*`);
 });
 
 // Set value
-router.put("/db/write/chats/:cuid/:uuid/:pass/:key/:newValue", async (req, res) => {
+router.put("/db/write/chat", async (req, res) => {
 	// cuid = chat uid, uuid = user uid
-	let { cuid, uuid, pass, key, newValue } = req.params;
+	let { cuid, uuid, username, password, key, newValue } = req.headers;
 	const client = await pool.connect();
-	try {
-		cuid = cuid.replaceAll("'", '"');
-		uuid = uuid.replaceAll("'", '"');
-		pass = pass.replaceAll("'", '"');
-		key = key.replaceAll('"', "'");
-		newValue = newValue.replaceAll("'", '"');
 
-		// Check user authorization
-		if (!authChat(cuid, uuid, pass)) res.status(403).send("");
-		else {
-			await client.query(`UPDATE chats SET "${key}"='${newValue}' WHERE uid='${cuid}'`);
-			res.sendStatus(204);
+	if (!uuid) {
+		if (!(uuid = await getUuid(username))) {
+			res.sendStatus(400);
+			throw new Error(`UUID not found for username '${usernane}'`);
 		}
-	} catch (e) {
-		console.error(e);
-		res.sendStatus(500);
-	} finally {
-		// ALWAYS release client.
-		client.release();
-	}
-});
-router.put("/db/write/send-message", async (req, res) => {
-	/**
-	 * @typedef {Object} message
-	 * @property {String} sender The uuid of the user who sent the message
-	 * @property {String} content The content of the message
-	 * @property {Number} timeSent The time the message was sent, taken from `Date.now()`
-	 * @property {Number} serverTime The time the message was sent, taken from the server.
-	 * @property {String} original The original message
-	 * @property {Boolean} deleted Was the message deleted?
-	 */
-	let { cuid, uuid, password, msg: msg_ } = req.headers;
-
-	// Ensure that `msg_` is JSON
-	try {
-		JSON.parse(msg_);
-	} catch (e) {
-		return res.sendStatus(415);
 	}
 
-	/** @type {message} */
-	const msg = JSON.parse(msg_);
-
-	// Add MUID to the message
-	msg.muid = genUuid();
-
-	const client = await pool.connect();
 	try {
 		cuid = cuid.replaceAll("'", '"');
 		uuid = uuid.replaceAll("'", '"');
 		password = password.replaceAll("'", '"');
-		msg.content = decodeAscii(msg.content);
+		key = key.replaceAll('"', "'");
+		newValue = newValue.replaceAll("'", '"');
 
 		// Check user authorization
-		if (!authChat(cuid, uuid, password)) res.sendStatus(403);
+		if (!authChat(cuid, uuid, password)) res.status(403).send("");
 		else {
-			// Update database
-			await client.query(`UPDATE chats SET messages=messages || $1 WHERE uid='${cuid}'`, [[msg]]);
+			await client.query(
+				`UPDATE chats SET "${key}"='${newValue}' WHERE uid='${cuid}'`
+			);
 			res.sendStatus(204);
 		}
 	} catch (e) {
@@ -141,9 +110,15 @@ router.post("/db/write/create-chat", async (req, res) => {
 		 * @type {String[]} */
 		const people = [];
 		for (const username of people_) {
-			const query = await client.query(`SELECT uid FROM users WHERE username='${username.replaceAll("'", '"')}'`);
+			const query = await client.query(
+				`SELECT uid FROM users WHERE username='${username.replaceAll(
+					"'",
+					'"'
+				)}'`
+			);
 
-			if (query.rowCount != 1) throw new Error(`UUID not found for user '${username}'`);
+			if (query.rowCount != 1)
+				throw new Error(`UUID not found for user '${username}'`);
 
 			people.push(query.rows[0]?.uid);
 		}
@@ -152,15 +127,23 @@ router.post("/db/write/create-chat", async (req, res) => {
 
 		// Add chat to chats table
 		const cuid = genUuid();
-		await client.query(`INSERT INTO chats(uid, name, people) VALUES ('${cuid}'::UUID, '${name}', ARRAY['${people.join("', '")}']::UUID[])`);
+		await client.query(
+			`INSERT INTO chats(uid, name, people) VALUES ('${cuid}'::UUID, '${name}', ARRAY['${people.join(
+				"', '"
+			)}']::UUID[])`
+		);
 
 		// Add chat to everyone's chats column
 		for (const uuid of people) {
 			// Ensure that the whole program doesn't crash if one user fails
 			try {
-				await client.query(`UPDATE users SET chats = chats || '${cuid}'::UUID WHERE uid='${uuid}'`);
+				await client.query(
+					`UPDATE users SET chats = chats || '${cuid}'::UUID WHERE uid='${uuid}'`
+				);
 			} catch (e) {
-				console.error(`User '${uuid}' couldn't be added to chat '${cuid}'.`);
+				console.error(
+					`User '${uuid}' couldn't be added to chat '${cuid}'.`
+				);
 				console.error(e);
 			}
 		}

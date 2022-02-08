@@ -1,31 +1,15 @@
-const { Pool, options } = require("./poolOptions");
-const pool = new Pool(options);
-const user = require("./user");
 const express = require("express");
-const chat = require("./chat");
-const auth = require("./functions/auth");
 const app = express();
 const port = 8080;
+
+// Load middleware
+["user", "chat", "auth", "message"].forEach(routerName =>
+	app.use(require(`./${routerName}`))
+);
 
 app.listen(port, () => console.log(`Zip Zap Zop starting on port ${port}.`));
 
 app.use(express.static("/ZipZapZop/public"));
-
-app.use(user);
-app.use(chat);
-
-// Get by username
-app.get("/auth/username-:username/:pass", async (req, res) => {
-	const { username, pass } = req.params;
-	if (await auth(username, pass, true)) res.sendStatus(200);
-	else res.sendStatus(403);
-});
-// Get by uid
-app.get("/auth/:uid/:pass", async (req, res) => {
-	const { uid, pass } = req.params;
-	if (await auth(uid, pass)) res.sendStatus(200);
-	else res.sendStatus(403);
-});
 
 // Get date from server
 app.get("/date", (_req, res) => res.send(`${Date.now()}`));
