@@ -57,11 +57,13 @@ try {
 		}
 
 		// Handle creating new chats
-		document.getElementById("compose")?.addEventListener("click", e => {
-			const elem = new CreateChat();
-			const modal = new Modal("Compose", elem);
-			document.body.appendChild(modal);
+		document.getElementById("compose")?.addEventListener("click", _ => {
+			const elem = new CreateChat(),
+				modal = new Modal("Compose", elem);
+
+			modal.addEventListener("zopModalClose", _ => modal.remove());
 			modal.open();
+			document.body.appendChild(modal);
 
 			elem.addEventListener(
 				"zopCreateChatSubmit",
