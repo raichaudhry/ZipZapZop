@@ -11,9 +11,7 @@ class Cookie {
 		this.options = options;
 		this.reset();
 	}
-	/**
-	 * Sets all of the cookie's metadata.
-	 */
+	/** Sets all of the cookie's metadata. */
 	reset() {
 		let cookieString = `${this.name}=${this.value}`;
 		for (const key in this.options) {
