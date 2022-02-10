@@ -11,9 +11,7 @@ class Cookie {
 		this.options = options;
 		this.reset();
 	}
-	/**
-	 * Sets all of the cookie's metadata.
-	 */
+	/** Sets all of the cookie's metadata. */
 	reset() {
 		let cookieString = `${this.name}=${this.value}`;
 		for (const key in this.options) {
@@ -23,6 +21,23 @@ class Cookie {
 		}
 		document.cookie = cookieString;
 	}
+
+	/** Removes the cookie from the browser. */
+	delete() {
+		const metadata = "";
+		for (const option in this.options) {
+			metadata += `;${option}=${this.options[option]}`;
+		}
+
+		document.cookie = `${this.name}=${metadata};expires=Thu, 01 Jan 1970 00:00:01 GMT`;
+	}
+
+	/** Change cookie options (for chaining) */
+	option(name, value) {
+		this[name] = value;
+		return this;
+	}
+
 	/**
 	 * Returns all the cookies in the document.
 	 * @type {Cookie[]}
