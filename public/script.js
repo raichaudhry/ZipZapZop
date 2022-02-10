@@ -88,6 +88,16 @@ try {
 			setTimeout(pollChats, 1000);
 		};
 		pollChats();
+
+		// Log out
+		const logout = document
+			.getElementById("hamburger")
+			.shadowRoot.getElementById("logout");
+		logout.addEventListener("click", _e => {
+			Cookie.get("uuid").option("path", "/").delete();
+			Cookie.get("username").option("path", "/").delete();
+			Cookie.get("password").option("path", "/").delete();
+		});
 	};
 
 	(async () => {
