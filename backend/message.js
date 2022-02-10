@@ -1,4 +1,9 @@
 const router = require("express").Router();
+const { v4: genUuid } = require("uuid");
+const { options, Pool } = require("./poolOptions"),
+	pool = new Pool(options);
+const { decodeAscii } = require("./functions/ascii");
+const authChat = require("./functions/authChat");
 
 router.put("/db/write/send-message", async (req, res) => {
 	/**
