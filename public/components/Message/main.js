@@ -41,22 +41,27 @@ class Message extends HTMLElement {
 		const content = document.createElement("div");
 		content.id = "content";
 		if (msg.content) content.textContent = msg.content;
-		else content.innerHTML = "<zop-error>Message failed to load</zop-error>";
+		else
+			content.innerHTML = "<zop-error>Message failed to load</zop-error>";
 
 		const author = document.createElement("div");
 		author.id = "author";
-		if (msg.author) author.textContent = msg.author;
-		else author.innerHTML = "<zop-error>No author found for message</zop-error>";
+		user(
+			this.msg.author,
+			Cookie.get("password")?.value ?? "",
+			"username"
+		).then(authorUsername => {
+			if (authorUsername) author.textContent = authorUsername;
+			else
+				author.innerHTML =
+					"<zop-error>No author found for message.</zop-error>";
 
-		this.appendChild(content);
-		this.appendChild(author);
+			this.shadowRoot.appendChild(content);
+			this.shadowRoot.appendChild(author);
+		});
 	}
 	async connectedCallback() {
 		this.shadowRoot.host.id = `msg-${this.msg.muid}`;
-
-		// Get username of author
-		const author = await user(this.msg.author, Cookie.get("password")?.value ?? "", "username");
-		this.getElementById("author").textContent = author;
 	}
 }
 customElements.define("chat-message", Message);
