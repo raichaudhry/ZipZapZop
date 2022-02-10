@@ -1,6 +1,7 @@
 import Cookie from "../../modules/Cookie.js";
 import Message from "../Message/main.js";
 import user from "../../modules/db/user.js";
+import chat from "../../modules/db/chat.js";
 import { encodeAscii } from "../../modules/ascii.js";
 
 class AuthError extends Error {
@@ -53,6 +54,18 @@ class ChatView extends HTMLElement {
 		/** @type HTMLTemplateElement */
 		let template = document.getElementById("x-chat-view-template");
 		shadowRoot.appendChild(template.content.cloneNode(true));
+
+		// Poll for new messages
+		const messagePoll = async () => {
+			try {
+				await this.loadMessages();
+			} catch (e) {
+				console.error(e);
+				return; // Only restart function if there wasn't an error.
+			}
+			setTimeout(messagePoll, 100);
+		};
+		messagePoll();
 	}
 	async connectedCallback() {
 		await this.loadMessages();
@@ -94,7 +107,10 @@ class ChatView extends HTMLElement {
 					},
 				});
 				if (res.status == 204) this.loadMessages();
-				else if (res.status == 500) alert("There was an error. Try sending the message again later.");
+				else if (res.status == 500)
+					alert(
+						"There was an error. Try sending the message again later."
+					);
 				else alert("There was an unknown error.");
 			} catch (e) {
 				console.error(e);
@@ -104,30 +120,38 @@ class ChatView extends HTMLElement {
 
 		this.appendChild(msgForm);
 	}
+
+	/**
+	 * A string of MUIDs
+	 * @type {string[]}
+	 */
 	async loadMessages() {
+		// TODO: implement cache
+
 		const uuid = Cookie.get("uuid").value,
 			password = Cookie.get("password").value;
-		const res = await fetch(`/db/chats/${this.cuid}/${uuid}/${password}/messages`);
+		/** @type {message} */
+		const messages = await chat(this.cuid, uuid, password, "messages");
 
-		if (res.status == 403) {
-			throw new AuthError(`Auth failed for chat '${this.cuid}'.
-			uuid: '${uuid}'
-			pass: '${password}'`);
+		if (!messages) {
+			console.warn(`No messages found for chat ${this.cuid}`);
+			return;
 		}
 
 		// Set the title in the nav bar
 		document.getElementById("title").textContent = this.title;
 
-		// Add messages
-		/** @type {message[]} */
-		const messages = (await res.json()).messages ?? [];
-
-		// Clear all previous messages
-		this.shadowRoot.host.querySelectorAll("chat-message").forEach(elem => elem.remove());
-
+		// Load the messages before clearing the previous messages
+		const messageElems = [];
 		for (const message of messages) {
 			const elem = new Message(message);
 			elem.slot = "messages";
+			messageElems.push(elem);
+		}
+
+		// Add all the new messages
+		for (const elem of messageElems) {
+			if (!!document.getElementById("msg-" + elem.msg.muid)) continue;
 			this.appendChild(elem);
 		}
 
