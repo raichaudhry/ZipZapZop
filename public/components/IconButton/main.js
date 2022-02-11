@@ -5,7 +5,7 @@ if (!document.getElementById("x-icon-button-template")) {
 	template.innerHTML = `<link rel="stylesheet" href="${PATH}/style.css" />
 	<button>
 		<slot name="icon"></slot>
-		<slot name="label"></slot>
+		<slot></slot>
 	</button>`;
 	document.body.appendChild(template);
 }
@@ -41,7 +41,6 @@ class IconButton extends HTMLElement {
 		}
 		if (this.label) {
 			const label = document.createElement("span");
-			label.slot = "label";
 			label.innerHTML = this.label;
 			this.appendChild(label);
 		}
