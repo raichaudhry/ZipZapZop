@@ -39,7 +39,7 @@ class IconButton extends HTMLElement {
 			);
 			this.appendChild(icon);
 		}
-		if (this.labe) {
+		if (this.label) {
 			const label = document.createElement("span");
 			label.slot = "label";
 			label.innerHTML = this.label;
