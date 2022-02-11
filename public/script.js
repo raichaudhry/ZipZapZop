@@ -97,6 +97,7 @@ try {
 			Cookie.get("uuid").option("path", "/").delete();
 			Cookie.get("username").option("path", "/").delete();
 			Cookie.get("password").option("path", "/").delete();
+			location.href = "/login";
 		});
 	};
 
