@@ -9,9 +9,15 @@
 	<body>
 		<top-nav id="topnav">
 			<side-nav id="hamburger">
-				<button id="logout">
-					<span class="material-icons-round">logout</span> Log Out
-				</button>
+				<icon-button id="logout">
+					<span class="material-icons-round" slot="icon">logout</span>
+					<span>Log Out</span>
+				</icon-button>
+				<icon-button>
+					<!-- prettier-ignore -->
+					<span class="material-icons-round" slot="icon">settings</span>
+					<span>Settings</span>
+				</icon-button>
 			</side-nav>
 			<h1 id="title" class="font-effect-shadow-multiple">Zip Zap Zop</h1>
 			<button id="compose" class="material-icons-round">create</button>
