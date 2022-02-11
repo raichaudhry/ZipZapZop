@@ -44,13 +44,8 @@ class Message extends HTMLElement {
 		else
 			content.innerHTML = "<zop-error>Message failed to load</zop-error>";
 
-		const author = document.createElement("div");
-		author.id = "author";
-		user(
-			this.msg.author,
-			Cookie.get("password")?.value ?? "",
-			"username"
-		).then(authorUsername => {
+		const author = this.shadowRoot.getElementById("author");
+		fetch("/db/user/username", { uid: msg.author }).then(authorUsername => {
 			if (authorUsername) author.textContent = authorUsername;
 			else
 				author.innerHTML =
