@@ -46,6 +46,28 @@ router.get("/db/user/", async (req, res) => {
 	}
 });
 
+// Get username from UUID
+router.get("/db/user/username", async (req, res) => {
+	let { uid } = req.headers;
+	const client = await pool.connect();
+	try {
+		// Add quotes to prevent SQL injection.
+		uid = uid.replaceAll("'", '"');
+
+		const query = await client.query(
+			`SELECT username FROM users WHERE uid='${uid}'`
+		);
+		const output = query.rows[0];
+		res.send(output);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send("");
+	} finally {
+		// ALWAYS check out client.
+		client.release();
+	}
+});
+
 // Set a new value
 router.put("/db/write/user/", async (req, res) => {
 	let { username, uid, password, key, newValue } = req.headers;
