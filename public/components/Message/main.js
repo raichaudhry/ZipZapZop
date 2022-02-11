@@ -6,9 +6,7 @@ const PATH = "/components/Message";
 if (!document.getElementById("x-message-template")) {
 	let template = document.createElement("template");
 	template.id = "x-message-template";
-	template.innerHTML = `
-	<link rel="stylesheet" href="${PATH}/style.css">
-	<slot></slot>`;
+	template.innerHTML = `<link rel="stylesheet" href="${PATH}/style.css"><div id="content"></div><div id="author"></div>`;
 	document.body.appendChild(template);
 }
 
@@ -38,8 +36,7 @@ class Message extends HTMLElement {
 		// Set id of `chat-message`
 		this.shadowRoot.host.id = `zop-message-${msg.muid}`;
 
-		const content = document.createElement("div");
-		content.id = "content";
+		const content = this.shadowRoot.getElementById("content");
 		if (msg.content) content.textContent = msg.content;
 		else
 			content.innerHTML = "<zop-error>Message failed to load</zop-error>";
