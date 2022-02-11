@@ -1,1 +1,27 @@
+:host {
+	--gap: 0.5em;
+	margin: var(--gap) 0;
 
+	position: relative;
+	display: block;
+
+	min-width: 25%;
+	max-width: 50%;
+	width: fit-content;
+}
+
+#content {
+	border-radius: var(--gap);
+	padding: var(--gap);
+
+	background-color: #efefef;
+}
+#content[data-self] {
+	background-color: #24afe6;
+}
+
+#author {
+	font-size: 0.75em;
+	color: grey;
+	margin-left: var(--gap);
+}
