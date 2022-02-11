@@ -46,13 +46,15 @@ class IconButton extends HTMLElement {
 		}
 	}
 	connectedCallback() {
-		// Load material icons
-		const link = document.createElement("link");
-		link.rel = "stylesheet";
-		link.href = `https://fonts.googleapis.com/icons?family=Material+Icons+${
-			this.options.materialIconType ?? "round"
-		}|Material+Icons`;
-		document.head.appendChild(link);
+		// Load material icons if necessary.
+		if (this.iconName) {
+			const link = document.createElement("link");
+			link.rel = "stylesheet";
+			link.href = `https://fonts.googleapis.com/icons?family=Material+Icons+${
+				this.options.materialIconType ?? "round"
+			}|Material+Icons`;
+			document.head.appendChild(link);
+		}
 	}
 }
 customElements.define("icon-button", IconButton);
