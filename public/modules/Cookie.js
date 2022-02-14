@@ -9,10 +9,10 @@ class Cookie {
 		this.name = name;
 		this.value = value;
 		this.options = options;
-		this.reset();
+		this.setMetadata();
 	}
 	/** Sets all of the cookie's metadata. */
-	reset() {
+	setMetadata() {
 		let cookieString = `${this.name}=${this.value}`;
 		for (const key in this.options) {
 			const value = this.options[key];
@@ -24,25 +24,47 @@ class Cookie {
 
 	/** Removes the cookie from the browser. */
 	delete() {
-		const metadata = "";
-		for (const option in this.options) {
-			metadata += `;${option}=${this.options[option]}`;
-		}
-
-		document.cookie = `${this.name}=${metadata};expires=Thu, 01 Jan 1970 00:00:01 GMT`;
+		this.option("expires", "Thu, 01 Jan 1970 00:00:01 GMT");
+		if (Cookie.rawCookies[this.name]) return false;
+		console.log(document.cookie);
+		return true;
 	}
 
 	/** Change cookie options (for chaining) */
 	option(name, value) {
-		this[name] = value;
+		switch (name) {
+			case "name":
+			case "value":
+			case "options":
+				this[name] = value;
+				break;
+			default:
+				this.options[name] = value;
+				break;
+		}
+		this.setMetadata();
 		return this;
 	}
 
 	/**
 	 * Returns all the cookies in the document.
-	 * @type {Cookie[]}
+	 * @type {{String: Cookie}}
 	 */
 	static get cookies() {
+		const rawCookies = Cookie.rawCookies;
+		const cookies = {};
+		for (const rawCookie in rawCookies) {
+			const { name, value } = rawCookie;
+			cookies[name] = new Cookie(name, value);
+		}
+		return cookies;
+	}
+
+	/**
+	 * Returns all the cookies in the document.
+	 * @type {{String: String}}
+	 */
+	static get rawCookies() {
 		if (document.cookie === "") return {};
 
 		const cookies = {};
@@ -50,18 +72,21 @@ class Cookie {
 			const cookieSplit = cookieString.split("=");
 			const name = cookieSplit[0],
 				value = cookieSplit[1];
-			const cookie = new Cookie(name, value);
-			cookies[name] = cookie;
+			cookies[name] = value;
 		}
 		return cookies;
 	}
+
 	/**
 	 * Returns a cookie from the browser. If not found, it will return undefined.
 	 * @param {String} name The name of the cookie.
+	 * @param {Object} options The options for the cookie (e.g. path, to prevent creating duplicate cookies).
 	 * @returns {Cookie?}
 	 */
-	static get(name) {
-		return Cookie.cookies[name];
+	static get(name, options = { path: "/" }) {
+		const rawCookie = Cookie.rawCookies[name];
+		if (rawCookie) return new Cookie(name, rawCookie, options);
+		else return null;
 	}
 
 	/**
