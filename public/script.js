@@ -94,10 +94,9 @@ try {
 			.getElementById("hamburger")
 			.shadowRoot.getElementById("logout");
 		logout.addEventListener("click", _e => {
-			Cookie.get("uuid").option("path", "/").delete();
-			Cookie.get("username").option("path", "/").delete();
-			Cookie.get("password").option("path", "/").delete();
-			location.href = "/login";
+			const cookies = ["uuid", "username", "password"];
+			cookies.forEach(cookieName => Cookie.get(cookieName)?.delete());
+			login();
 		});
 	};
 
